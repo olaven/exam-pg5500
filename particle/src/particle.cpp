@@ -1,5 +1,15 @@
+/******************************************************/
+//       THIS IS A GENERATED FILE - DO NOT EDIT       //
+/******************************************************/
+
+#include "application.h"
+#line 1 "/Users/olav/Documents/skole/kristiania/5_semester/embedded_systems/eksamen/particle/src/particle.ino"
 #include <Adafruit_ST7735.h>
 
+void setup();
+int gong(String command);
+void loop();
+#line 3 "/Users/olav/Documents/skole/kristiania/5_semester/embedded_systems/eksamen/particle/src/particle.ino"
 Servo myservo; // create servo object to control a servo
                // a maximum of eight servo objects can be created
 
