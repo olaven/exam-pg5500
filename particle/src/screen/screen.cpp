@@ -1,6 +1,12 @@
 #include "Adafruit_ST7735.h"
 #include "Particle.h"
-#include "screen.h"; 
+#include "screen.h";
+
+Adafruit_ST7735 init_screen(int cs, int dc, int rst) 
+{
+    Adafruit_ST7735 screen = Adafruit_ST7735(cs, dc, rst);
+    return screen; 
+}
 
 void setup_screen(Adafruit_ST7735 screen)
 {

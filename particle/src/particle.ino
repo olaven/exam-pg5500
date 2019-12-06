@@ -1,12 +1,7 @@
 #include "Adafruit_ST7735.h"
-#include "screen.h"
+#include "./screen/screen.h"
 
-const int cs = A2; 
-const int dc = D0; 
-const int rst = A0; 
-
-Adafruit_ST7735 screen = Adafruit_ST7735(cs, dc, rst);
-
+Adafruit_ST7735 screen = init_screen(A2, D0, A0);
 
 /*
 
