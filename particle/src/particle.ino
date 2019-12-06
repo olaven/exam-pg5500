@@ -30,8 +30,6 @@ void loop()
 
   button_test();
 
-  
-
   struct Layout layout = {
       .screen = screen,
       .elements = {
@@ -42,8 +40,8 @@ void loop()
           {
               .text = "bottom",
               .position = BOTTOM_RIGHT_CORNER,
-          }, 
-      }, 
+          },
+      },
   };
 
   render_layout(2, layout); 

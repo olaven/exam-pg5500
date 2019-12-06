@@ -1,6 +1,6 @@
 #include "Adafruit_ST7735.h"
 #include "Particle.h"
-#include "screen.h";
+#include "screen.h"
 
 Screen init_screen(int cs, int dc, int rst) 
 {
