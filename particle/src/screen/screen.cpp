@@ -20,6 +20,6 @@ void write_text(Screen screen, String text, int x, int y, int text_size)
     screen.setTextSize(text_size);
     screen.setCursor(x, y);
     screen.setTextColor(ST7735_WHITE);
-    screen.setTextWrap(true);
+    //screen.setTextWrap(true);
     screen.print(text);
 }
