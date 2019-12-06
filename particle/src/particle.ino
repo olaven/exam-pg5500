@@ -1,92 +1,58 @@
-#include <Adafruit_ST7735.h>
+  #include "Adafruit_ST7735.h"
 
-Servo myservo; // create servo object to control a servo
-               // a maximum of eight servo objects can be created
+const int cs = A2; 
+const int dc = D0; 
+const int rst = A0; 
 
-int pos = 0; // variable to store the servo position
+Adafruit_ST7735 screen = Adafruit_ST7735(cs, dc, rst);
 
-#define cs A2
-#define dc D0
-#define rst A0
 
-Adafruit_ST7735 tft = Adafruit_ST7735(cs, dc, rst); // hardware spi
+/*
 
-int photosensor = A1;
-int sensor_value;
+TODO: 
+- [ ] Skjerm  
+- [ ] Bytte mellom skjermer med knapp 
+- [ ] Skjerm 1: 
+  - [ ] Viser klokkeslett
+  - [ ] Vise neste kollektivtransportmulighet 
+  - [ ] Sette stasjon via web-grensesnitt 
+- [ ] Skjerm 2
+  - [ ] Temperatursensor
+  - [ ] Temeperatur fra vaermelding 
+- [ ] Skjerm 3 -> Soevnlogger
+  - [ ] Knapp for aa registrere sove/vaakne 
+  - [ ] Lagre dem paa SD-kort 
+
+*/
+
+void setup_screen()
+{
+  screen.initG();
+  screen.setRotation(3);
+  screen.fillScreen(ST7735_BLACK);
+}
 
 void setup()
 {
-
-  tft.initG();
-
-  tft.fillScreen(ST7735_BLACK);
-
-  tft.setCursor(0, 0);
-  tft.setTextColor(ST7735_WHITE);
-  tft.setTextWrap(true);
-  tft.print("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur adipiscing ante sed nibh tincidunt feugiat. Maecenas enim massa, fringilla");
-
-  tft.drawLine(0, 0, tft.width() - 1, tft.height() - 1, ST7735_YELLOW);
-  tft.drawLine(tft.width() - 1, 0, 0, tft.height() - 1, ST7735_YELLOW);
-
-  tft.drawPixel(0, tft.height() / 2, ST7735_GREEN);
-
   Serial.begin(9600);
-  Particle.function("gong", gong);
-  myservo.attach(D1);
-  myservo.write(25);
-  pinMode(D7, OUTPUT);
+  Serial.println("i setup");
 
-  pinMode(D5, OUTPUT);
-  digitalWrite(D5, HIGH);
+  setup_screen(); 
 }
 
-int gong(String command) // when "gong" is called from the cloud, it will
-{                        // be accompanied by a string.
-  if (command == "now")  // if the string is "now", ring the gong once.
-  {
-    myservo.write(0);       // move servo to 0° - ding!
-    digitalWrite(D7, HIGH); // flash the LED (as an indicator)
-    delay(100);             // wait 100 ms
-    myservo.write(25);      // move servo to 25°
-    digitalWrite(D7, LOW);  // turn off LED
-    return 1;               // return a status of "1"
-  }
-  else if (command == "alarm") // if the string is "alarm",
-  {
-    for (int i = 0; i < 3; i++) // ring the gong 3 times.
-    {
-      myservo.write(0);       // move servo to 0° - ding!
-      digitalWrite(D7, HIGH); // flash the LED
-      delay(100);             // wait 100 ms
-      myservo.write(25);      // move servo to 25°
-      digitalWrite(D7, LOW);  // turn off LED
-      delay(1000);            // wait 1 second between gongs
-    }
-    return 2; // return a status of "2"
-  }
+void write_text(String text) {
 
-  return 0;
+
+  screen.setTextSize(2);
+  screen.setCursor(40, 55);
+  screen.setTextColor(ST7735_WHITE);
+  screen.setTextWrap(true);
+  screen.print(text); 
 }
 
 void loop()
-
 {
+  Serial.println("i loop");
 
-  int sensorValue = analogRead(photosensor);
-
-  if (sensorValue < 100)
-  {
-    myservo.write(0);
-  }
-  else
-  {
-    int pos = map(sensorValue, 100, 1600, 0, 127);
-    Serial.print("pos");
-    Serial.println(pos);
-    myservo.write(pos);
-  }
-  delay(50);
-  Serial.print("Sensor value: ");
-  Serial.println(sensorValue);
+  write_text("Olav");
 }

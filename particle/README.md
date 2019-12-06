@@ -1,10 +1,10 @@
-# particle
+# particle_2
 
-A Particle project named particle
+A Particle project named particle_2
 
 ## Welcome to your project!
 
-Every new Particle project is composed of 3 important elements that you'll see have been created in your project directory for particle.
+Every new Particle project is composed of 3 important elements that you'll see have been created in your project directory for particle_2.
 
 #### ```/src``` folder:  
 This is the source folder that contains the firmware files for your project. It should *not* be renamed. 
