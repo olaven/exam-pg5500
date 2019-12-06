@@ -1,4 +1,5 @@
-  #include "Adafruit_ST7735.h"
+#include "Adafruit_ST7735.h"
+#include "screen.h"
 
 const int cs = A2; 
 const int dc = D0; 
@@ -10,7 +11,8 @@ Adafruit_ST7735 screen = Adafruit_ST7735(cs, dc, rst);
 /*
 
 TODO: 
-- [ ] Skjerm  
+- [X] Skjerm  
+- [X] Splitt opp kode 
 - [ ] Bytte mellom skjermer med knapp 
 - [ ] Skjerm 1: 
   - [ ] Viser klokkeslett
@@ -25,34 +27,22 @@ TODO:
 
 */
 
-void setup_screen()
-{
-  screen.initG();
-  screen.setRotation(3);
-  screen.fillScreen(ST7735_BLACK);
-}
-
 void setup()
 {
   Serial.begin(9600);
-  Serial.println("i setup");
-
-  setup_screen(); 
-}
-
-void write_text(String text) {
-
-
-  screen.setTextSize(2);
-  screen.setCursor(40, 55);
-  screen.setTextColor(ST7735_WHITE);
-  screen.setTextWrap(true);
-  screen.print(text); 
+  setup_screen(screen); 
 }
 
 void loop()
 {
-  Serial.println("i loop");
 
-  write_text("Olav");
+  if(digitalRead(D1)) {
+    Serial.println("Button 1 is pressed");
+  }
+
+  if(digitalRead(D2)) {
+    Serial.println("Button 2 is pressed");
+  }
+
+  write_text(screen, "Olav");
 }
