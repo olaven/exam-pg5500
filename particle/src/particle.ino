@@ -1,6 +1,6 @@
 #include "Adafruit_ST7735.h"
 #include "./screen/screen.h"
-#include "./screen/layout.h"; 
+#include "./screen/layout.h"
 
 Adafruit_ST7735 screen = init_screen(A2, D0, A0);
 
@@ -12,22 +12,41 @@ void setup()
   
 }
 
-void loop()
+void button_test() 
 {
-  if(digitalRead(D1)) {
+  if (digitalRead(D1))
+  {
     Serial.println("Button 1 is pressed");
   }
 
-  if(digitalRead(D2)) {
+  if (digitalRead(D2))
+  {
     Serial.println("Button 2 is pressed");
   }
+}
 
+void loop()
+{
 
-  layout_write(screen, "Center", CENTER);
-  layout_write(screen, "B_LEFT", BOTTOM_LEFT_CORNER);
-  layout_write(screen, "B_RIGHT", BOTTOM_RIGHT_CORNER); 
-  layout_write(screen, "T_LEFT", TOP_LEFT_CORNER);
-  layout_write(screen, "T_RIGHT", TOP_RIGHT_CORNER); 
+  button_test();
+
+  
+
+  struct Layout layout = {
+      .screen = screen,
+      .elements = {
+          {
+              .text = "center",
+              .position = CENTER,
+          },
+          {
+              .text = "bottom",
+              .position = BOTTOM_RIGHT_CORNER,
+          }, 
+      }, 
+  };
+
+  render_layout(2, layout); 
 }
 
 /*

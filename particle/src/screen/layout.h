@@ -12,6 +12,20 @@ enum LayoutPosition
     TOP_LEFT_CORNER,
     TOP_RIGHT_CORNER
 };
-void layout_write(Screen screen, String text, LayoutPosition position);
+
+struct Element
+{
+    String text;
+    LayoutPosition position;
+};
+
+struct Layout
+{
+    Screen screen;
+    Element elements[4];
+};
+
+
+void render_layout(int element_count, Layout layout); 
 
 #endif

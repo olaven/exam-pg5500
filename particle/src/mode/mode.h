@@ -1,0 +1,6 @@
+#ifndef EMBEDDED_EXAM_MODE
+#define EMBEDDED_EXAM_MODE
+
+//TODO 
+
+#endif
