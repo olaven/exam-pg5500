@@ -30,7 +30,6 @@ void setup()
 
 void loop()
 {
-
   if(digitalRead(D1)) {
     Serial.println("Button 1 is pressed");
   }
