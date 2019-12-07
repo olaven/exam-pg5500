@@ -6,7 +6,7 @@ Adafruit_ST7735 screen = init_screen(A2, D0, A0);
 
 //TODO: these should be separate screens / folders
 
-struct Layout layouts[2] = {
+struct Layout layouts[3] = {
   {
     .screen = screen,   
     .elements = {
@@ -32,10 +32,23 @@ struct Layout layouts[2] = {
         .position = BOTTOM_LEFT_CORNER, 
       }, 
     }
+  },
+  {
+    .screen = screen,   
+    .elements = {
+      {
+        .text = "3center", 
+        .position = CENTER, 
+      }, 
+      {
+        .text = "3bottom", 
+        .position = BOTTOM_LEFT_CORNER, 
+      }, 
+    }
   }
 };
 
-LayoutState layout_state = setup_render(D2, D1, 2, layouts);
+LayoutState layout_state = setup_render(D2, D1, 3, layouts);
 
 void setup()
 {

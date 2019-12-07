@@ -18,25 +18,31 @@ int buttons_are_valid()
     return 1;
 }
 
-void to_next_layout(LayoutState * layout_state)
+void to_next_layout(LayoutState * layout_state_pointer)
 {
-    int current = layout_state->current_layout_index;
-    int next = (current + 1) % layout_state->total_layout_count;
-    layout_state->current_layout_index = next;
-    layout_state=>previous_layout_index = current; 
+    int current = layout_state_pointer->current_layout_index;
+    int next = (current + 1) % layout_state_pointer->total_layout_count;
+    layout_state_pointer->current_layout_index = next;
+    layout_state_pointer->previous_layout_index = current; 
 }
 
-void to_previous_layout(LayoutState * layout_state)
+void to_previous_layout(LayoutState * layout_state_pointer)
 {
-    int current = layout_state->current_layout_index;
+    int current = layout_state_pointer->current_layout_index;
     int previous = (current - 1);
     if (previous < 0)
     {
-        previous = layout_state->total_layout_count - 1;
+        previous = layout_state_pointer->total_layout_count - 1;
     }
 
-    layout_state->current_layout_index = previous;
-    layout_state=>previous_layout_index = current; 
+    layout_state_pointer->current_layout_index = previous;
+    layout_state_pointer->previous_layout_index = current; 
+}
+
+void stay_on_same_layout(LayoutState * layout_state_pointer) 
+{
+    int current = layout_state_pointer->current_layout_index;
+    layout_state_pointer->previous_layout_index = current; 
 }
 
 void listen_for_layout_change(LayoutState * layout_state_pointer) 
@@ -46,13 +52,19 @@ void listen_for_layout_change(LayoutState * layout_state_pointer)
     {
         if (digitalRead(next_button_pin))
         {
-            to_next_layout(layout_state_pointer); 
+            to_next_layout(layout_state_pointer);
         }
         else if (digitalRead(previous_button_pin))
         {
             to_previous_layout(layout_state_pointer); 
+        } 
+        else 
+        {
+            stay_on_same_layout(layout_state_pointer); 
         }
     }
+
+    delay(100); //avoiding going back at once TODO: replace with millis to avoid actually stopping?
 }
 
 LayoutState setup_layout(
