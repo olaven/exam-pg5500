@@ -3,28 +3,70 @@
 int next_button_pin = -1;
 int previous_button_pin = -1;
 
-void listen_for_layout_change(LayoutState layout_state) 
+/**
+ * TODO: This file should be exposed with setup to main ino file 
+ */
+
+int buttons_are_valid()
 {
-    //TODO: listen to buttons 
-    //TODO: avoid multiple triggers (delay?)
+
+    if (next_button_pin < 0 || previous_button_pin < 0)
+    {
+        Serial.println("Button PIN does not seem valid.");
+        return -1;
+    }
+    return 1;
 }
 
+void to_next_layout(LayoutState * layout_state)
+{
+    int current = layout_state->current_layout_index;
+    int next = (current + 1) % layout_state->total_layout_count;
+    layout_state->current_layout_index = next;
+}
 
-LayoutState setup_modes(
-    int _next_button_pin, 
-    int _previous_button_pin, 
-    int total_layout_count, 
-    Layout * layouts)  
+void to_previous_layout(LayoutState * layout_state)
+{
+    int current = layout_state->current_layout_index;
+    int previous = (current - 1);
+    if (previous < 0)
+    {
+        previous = layout_state->total_layout_count - 1;
+    }
+
+    layout_state->current_layout_index = previous;
+}
+
+void listen_for_layout_change(LayoutState * layout_state_pointer) 
+{
+    //TODO: avoid multiple triggers (delay?)
+    if (buttons_are_valid()) 
+    {
+        if (digitalRead(next_button_pin))
+        {
+            to_next_layout(layout_state_pointer); 
+        }
+        else if (digitalRead(previous_button_pin))
+        {
+            to_previous_layout(layout_state_pointer); 
+        }
+    }
+}
+
+LayoutState setup_layout(
+    int _next_button_pin,
+    int _previous_button_pin,
+    int total_layout_count,
+    Layout *layouts)
 {
 
-    next_button_pin = _next_button_pin; 
-    previous_button_pin = _next_button_pin;
+    next_button_pin = _next_button_pin;
+    previous_button_pin = _previous_button_pin;
 
     struct LayoutState initial_state = {
         .current_layout_index = 0,
         .total_layout_count = total_layout_count,
-        .layouts = layouts,
-    };
-    
+        .layouts = layouts};
+
     return initial_state;
 }

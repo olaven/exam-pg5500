@@ -1,17 +1,49 @@
 #include "Adafruit_ST7735.h"
+#include "./layout/render.h"
 #include "./layout/layout.h"
 
 Adafruit_ST7735 screen = init_screen(A2, D0, A0);
 
+//TODO: these should be separate screens / folders
+
+struct Layout layouts[2] = {
+  {
+    .screen = screen,   
+    .elements = {
+      {
+        .text = "1center", 
+        .position = CENTER, 
+      }, 
+      {
+        .text = "1bottom", 
+        .position = BOTTOM_LEFT_CORNER, 
+      }, 
+    }
+  }, 
+  {
+    .screen = screen,   
+    .elements = {
+      {
+        .text = "2center", 
+        .position = CENTER, 
+      }, 
+      {
+        .text = "2bottom", 
+        .position = BOTTOM_LEFT_CORNER, 
+      }, 
+    }
+  }
+};
+
+LayoutState layout_state = setup_render(D2, D1, 2, layouts);
 
 void setup()
 {
   Serial.begin(9600);
-  setup_screen(screen); 
-  
+  setup_screen(screen);
 }
 
-void button_test() 
+void button_test()
 {
   if (digitalRead(D1))
   {
@@ -26,24 +58,8 @@ void button_test()
 
 void loop()
 {
-
+  render(&layout_state);
   button_test();
-
-  struct Layout layout = {
-      .screen = screen,
-      .elements = {
-          {
-              .text = "center",
-              .position = CENTER,
-          },
-          {
-              .text = "bottom",
-              .position = BOTTOM_RIGHT_CORNER,
-          },
-      },
-  };
-
-  render_layout(2, layout); 
 }
 
 /*

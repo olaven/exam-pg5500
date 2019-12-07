@@ -1,6 +1,6 @@
 #include "./layout.h"
 
-void layout_write(Screen screen, String text, LayoutPosition position)
+void render_layout(Screen screen, String text, LayoutPosition position)
 {
 
     switch (position)
@@ -24,12 +24,38 @@ void layout_write(Screen screen, String text, LayoutPosition position)
     }
 }
 
-void render_layout(int element_count, Layout layout)
+int previous_layout = 0; //NOTE: assuming that 0 is always default layout (for now) 
+void render(LayoutState * layout_state_pointer) 
 {
-    Screen screen = layout.screen;
-    for (int i = 0; i < element_count; i++)
+
+    listen_for_layout_change(layout_state_pointer);
+    if (layout_state_pointer->current_layout_index != previous_layout) 
     {
-        Element element = layout.elements[i];
-        layout_write(screen, element.text, element.position);
+        Layout layout = layout_state_pointer->layouts[layout_state_pointer->current_layout_index];
+        Screen screen = layout.screen;
+        clear_screen(screen);
+        
+        for (int i = 0; i < layout_state_pointer->total_layout_count; i++)
+        {
+            Element element = layout.elements[i];
+            render_layout(screen, element.text, element.position);
+        }
+
+        previous_layout = layout_state_pointer->current_layout_index; 
     }
+}
+
+//TODO: this should be removed, in favour of just using layout 
+//NOTE: This is just a wrapper to avoid multiple includes in `.ino`-file.
+LayoutState setup_render(
+    int _next_button_pin,
+    int _previous_button_pin,
+    int total_layout_count,
+    Layout *layouts) 
+{
+    return setup_layout(
+        _next_button_pin, 
+        _previous_button_pin, 
+        total_layout_count, 
+        layouts); 
 }

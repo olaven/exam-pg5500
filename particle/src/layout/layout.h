@@ -31,6 +31,12 @@ struct LayoutState
     Layout *layouts;
 };
 
-void render_layout(int element_count, Layout layout);
+LayoutState setup_layout(
+    int _next_button_pin,
+    int _previous_button_pin,
+    int total_layout_count,
+    Layout *layouts);
+
+void listen_for_layout_change(LayoutState * layout_state_pointer); 
 
 #endif

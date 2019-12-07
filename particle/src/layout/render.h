@@ -3,7 +3,17 @@
 
 #include "./layout.h"
 
+LayoutState setup_render(
+    int _next_button_pin,
+    int _previous_button_pin,
+    int total_layout_count,
+    Layout *layouts);
 
-void render_layout(int element_count, Layout layout);
+/**
+ * Will listen for changes to layout 
+ * and render the current layout 
+ * when changed //TODO: I may need other trigger methods for rerender
+ */
+void render(LayoutState * layout_state_pointer);
 
 #endif
