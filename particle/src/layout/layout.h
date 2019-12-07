@@ -27,6 +27,7 @@ struct Layout
 struct LayoutState
 {
     int current_layout_index;
+    int previous_layout_index;
     int total_layout_count;
     Layout *layouts;
 };

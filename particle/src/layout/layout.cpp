@@ -23,6 +23,7 @@ void to_next_layout(LayoutState * layout_state)
     int current = layout_state->current_layout_index;
     int next = (current + 1) % layout_state->total_layout_count;
     layout_state->current_layout_index = next;
+    layout_state=>previous_layout_index = current; 
 }
 
 void to_previous_layout(LayoutState * layout_state)
@@ -35,6 +36,7 @@ void to_previous_layout(LayoutState * layout_state)
     }
 
     layout_state->current_layout_index = previous;
+    layout_state=>previous_layout_index = current; 
 }
 
 void listen_for_layout_change(LayoutState * layout_state_pointer) 
@@ -65,6 +67,7 @@ LayoutState setup_layout(
 
     struct LayoutState initial_state = {
         .current_layout_index = 0,
+        .previous_layout_index = 0, //NOTE: OK as long as 0 is default index 
         .total_layout_count = total_layout_count,
         .layouts = layouts};
 

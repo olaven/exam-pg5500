@@ -2,7 +2,6 @@
 
 void render_layout(Screen screen, String text, LayoutPosition position)
 {
-
     switch (position)
     {
     case CENTER:
@@ -24,12 +23,13 @@ void render_layout(Screen screen, String text, LayoutPosition position)
     }
 }
 
-int previous_layout = 0; //NOTE: assuming that 0 is always default layout (for now) 
+//TODO: split this function
 void render(LayoutState * layout_state_pointer) 
 {
-
+    Serial.print("Previous layout: ");
+    Serial.println(layout_state_pointer->previous_layout_index);
     listen_for_layout_change(layout_state_pointer);
-    if (layout_state_pointer->current_layout_index != previous_layout) 
+    if (layout_state_pointer->current_layout_index != layout_state_pointer->previous_layout_index) 
     {
         Layout layout = layout_state_pointer->layouts[layout_state_pointer->current_layout_index];
         Screen screen = layout.screen;
@@ -40,8 +40,6 @@ void render(LayoutState * layout_state_pointer)
             Element element = layout.elements[i];
             render_layout(screen, element.text, element.position);
         }
-
-        previous_layout = layout_state_pointer->current_layout_index; 
     }
 }
 
