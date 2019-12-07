@@ -1,8 +1,7 @@
 #ifndef EMBEDDED_EXAM_LAYOUT
 #define EMBEDDED_EXAM_LAYOUT
 
-#include "Particle.h"
-#include "screen.h"
+#include "../screen/screen.h"
 
 enum LayoutPosition
 {
@@ -25,7 +24,13 @@ struct Layout
     Element elements[4];
 };
 
+struct LayoutState
+{
+    int current_layout_index;
+    int total_layout_count;
+    Layout *layouts;
+};
 
-void render_layout(int element_count, Layout layout); 
+void render_layout(int element_count, Layout layout);
 
 #endif

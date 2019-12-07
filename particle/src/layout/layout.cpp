@@ -1,5 +1,4 @@
-#include "./mode.h"
-#include "../screen/layout.h"
+#include "./layout.h"
 
 int next_button_pin = -1;
 int previous_button_pin = -1;

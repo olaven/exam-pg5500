@@ -1,6 +1,4 @@
-#include "Particle.h"
-#include "screen.h"
-#include "layout.h"
+#include "./layout.h"
 
 void layout_write(Screen screen, String text, LayoutPosition position)
 {
@@ -26,12 +24,12 @@ void layout_write(Screen screen, String text, LayoutPosition position)
     }
 }
 
-void render_layout(int element_count, Layout layout) 
+void render_layout(int element_count, Layout layout)
 {
-    Screen screen = layout.screen; 
-    for(int i = 0; i < element_count; i++) 
+    Screen screen = layout.screen;
+    for (int i = 0; i < element_count; i++)
     {
-        Element element = layout.elements[i]; 
-        layout_write(screen, element.text, element.position); 
+        Element element = layout.elements[i];
+        layout_write(screen, element.text, element.position);
     }
 }

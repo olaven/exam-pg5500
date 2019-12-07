@@ -1,6 +1,5 @@
 #include "Adafruit_ST7735.h"
-#include "./screen/screen.h"
-#include "./screen/layout.h"
+#include "./layout/layout.h"
 
 Adafruit_ST7735 screen = init_screen(A2, D0, A0);
 
