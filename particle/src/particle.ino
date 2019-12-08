@@ -1,6 +1,7 @@
 #include "Adafruit_ST7735.h"
 #include "./render/render.h"
 #include "./layout/layout.h"
+#include "./http/get_test.h"
 
 Adafruit_ST7735 screen = init_screen(A2, D0, A0);
 
@@ -48,7 +49,8 @@ struct Layout layouts[3] = {
   }
 };
 
-LayoutState layout_state = setup_layout(D2, D1, 3, layouts);
+LayoutState layout_state = setup_layout_state(D2, D1, 3, layouts);
+TCPClient client; 
 
 void setup()
 {
@@ -56,23 +58,9 @@ void setup()
   setup_screen(screen);
 }
 
-void button_test()
-{
-  if (digitalRead(D1))
-  {
-    Serial.println("Button 1 is pressed");
-  }
-
-  if (digitalRead(D2))
-  {
-    Serial.println("Button 2 is pressed");
-  }
-}
-
 void loop()
 {
   render(&layout_state);
-  button_test();
 }
 
 /*
@@ -80,12 +68,12 @@ void loop()
 TODO: 
 - [X] Skjerm  
 - [X] Splitt opp kode 
-- [ ] Bytte mellom skjermer med knapp 
+- [X] Bytte mellom skjermer med knapp 
 - [ ] Skjerm 1: 
   - [ ] Viser klokkeslett
   - [ ] Vise neste kollektivtransportmulighet 
   - [ ] Sette stasjon via web-grensesnitt 
-- [ ] Skjerm 2
+- [ ] Skjerm 2 -> Temperatur
   - [ ] Temperatursensor
   - [ ] Temeperatur fra vaermelding 
 - [ ] Skjerm 3 -> Soevnlogger

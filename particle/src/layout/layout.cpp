@@ -67,7 +67,7 @@ void listen_for_layout_change(LayoutState * layout_state_pointer)
     delay(100); //avoiding going back at once TODO: replace with millis to avoid actually stopping?
 }
 
-LayoutState setup_layout(
+LayoutState setup_layout_state(
     int _next_button_pin,
     int _previous_button_pin,
     int total_layout_count,

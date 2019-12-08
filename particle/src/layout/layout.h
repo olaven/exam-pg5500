@@ -32,7 +32,7 @@ struct LayoutState
     Layout *layouts;
 };
 
-LayoutState setup_layout(
+LayoutState setup_layout_state(
     int _next_button_pin,
     int _previous_button_pin,
     int total_layout_count,
