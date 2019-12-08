@@ -30,18 +30,15 @@ int layout_has_changed(LayoutState * layout_state_pointer)
     return current != previous; 
 }
 
+
 //TODO: split this function
 void render(LayoutState * layout_state_pointer) 
 {
-    Serial.print("Previous layout: ");
-    Serial.print(layout_state_pointer->previous_layout_index);
-    Serial.print(" Current layout: ");
-    Serial.println(layout_state_pointer->current_layout_index);
-
-
+    static int render_count = 0; 
     listen_for_layout_change(layout_state_pointer);
-    if (layout_has_changed(layout_state_pointer)) 
+    if (layout_has_changed(layout_state_pointer) || render_count == 0) 
     {
+        render_count++; 
         Layout layout = layout_state_pointer->layouts[layout_state_pointer->current_layout_index];
         Screen screen = layout.screen;
         clear_screen(screen);
@@ -60,7 +57,7 @@ LayoutState setup_render(
     int _next_button_pin,
     int _previous_button_pin,
     int total_layout_count,
-    Layout *layouts) 
+    Layout * layouts) 
 {
     return setup_layout(
         _next_button_pin, 
