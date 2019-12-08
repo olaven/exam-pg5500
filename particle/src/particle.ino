@@ -1,5 +1,5 @@
 #include "Adafruit_ST7735.h"
-#include "./layout/render.h"
+#include "./render/render.h"
 #include "./layout/layout.h"
 
 Adafruit_ST7735 screen = init_screen(A2, D0, A0);
@@ -48,7 +48,7 @@ struct Layout layouts[3] = {
   }
 };
 
-LayoutState layout_state = setup_render(D2, D1, 3, layouts);
+LayoutState layout_state = setup_layout(D2, D1, 3, layouts);
 
 void setup()
 {

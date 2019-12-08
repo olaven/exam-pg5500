@@ -1,4 +1,4 @@
-#include "./layout.h"
+#include "../layout/layout.h"
 
 void render_layout(Screen screen, String text, LayoutPosition position)
 {
@@ -49,19 +49,4 @@ void render(LayoutState * layout_state_pointer)
             render_layout(screen, element.text, element.position);
         }
     }
-}
-
-//TODO: this should be removed, in favour of just using layout 
-//NOTE: This is just a wrapper to avoid multiple includes in `.ino`-file.
-LayoutState setup_render(
-    int _next_button_pin,
-    int _previous_button_pin,
-    int total_layout_count,
-    Layout * layouts) 
-{
-    return setup_layout(
-        _next_button_pin, 
-        _previous_button_pin, 
-        total_layout_count, 
-        layouts); 
 }
