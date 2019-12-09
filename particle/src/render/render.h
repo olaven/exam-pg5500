@@ -6,7 +6,7 @@
 /**
  * Will listen for changes to layout 
  * and render the current layout 
- * when changed //TODO: I may need other trigger methods for rerender
+ * when changed 
  */
 void render(LayoutState * layout_state_pointer);
 

@@ -2,6 +2,7 @@
 #include "./render/render.h"
 #include "./layout/layout.h"
 #include "./layout/temperature/temperature.h"
+#include "./christmas/christmas.h"
 
 //PINS
 // -- screen 
@@ -28,12 +29,16 @@ void setup()
 {
   Serial.begin(9600);
   Particle.publishVitals(5);
+
   setup_screen(screen);
+  setup_christmas_mode(D5, D3, D4);
 }
+
 
 void loop()
 {
   render(&layout_state);
+  christmas_mode();
 }
 
 /*
@@ -47,7 +52,7 @@ TODO:
   - [ ] Vise neste kollektivtransportmulighet 
   - [ ] Sette stasjon via web-grensesnitt 
 - [ ] Skjerm 2 -> Temperatur
-  - [ ] Temperatursensor
+  - [X] Temperatursensor
   - [ ] Temeperatur fra vaermelding 
 - [ ] Skjerm 3 -> Soevnlogger
   - [ ] Knapp for aa registrere sove/vaakne 
@@ -55,4 +60,7 @@ TODO:
 - [ ] Skjerm 4 -> bilderamme 
   - [ ] Vise bilder 
   - [ ] Vise bilde fra SD-kort
+- [ ] Misc 
+  - [ ] Flammesensor som "brannalarm"
+  - [ ] Christmas mode
 */
