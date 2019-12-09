@@ -3,6 +3,8 @@
 
 #include "../screen/screen.h"
 
+#define MAX_ELEMENT_COUNT 8 
+
 enum LayoutPosition
 {
     CENTER,
@@ -22,7 +24,7 @@ struct Layout
 {
     Screen screen;
     int element_count; 
-    void (*updated_elements)(Element * elements_buffer);
+    void (*updated_elements)(Element elements[MAX_ELEMENT_COUNT]);
 };
 
 struct LayoutState

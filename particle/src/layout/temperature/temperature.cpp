@@ -1,40 +1,34 @@
 /*
 - [ ] Skjerm 2 -> Temperatur
-    - [ ] Temperatursensor
+    - [X] Temperatursensor
     - [ ] Temeperatur fra vaermelding 
 */
 
 #include "../layout.h"
 
-static int pin;
-static String local_temperature = "..";
+int local_temperature_pin;
 const int element_count = 2; 
 
 
-void updated_temperature_elements(Element * elements) 
+void updated_temperature_elements(Element elements[MAX_ELEMENT_COUNT]) 
 {
-    /* const int analog_value = analogRead(pin);
-    float celcius = (0.8 * analog_value / 1024.0);
+    const int analog_value = analogRead(local_temperature_pin);
+    const float celcius = (0.08 * analog_value / 1024.0);
     
-    local_temperature = String("Inne: ", celcius); */
+    String local_temperature = "Inne " + String(round(celcius)); 
+    //Element elements[2]; 
 
+    elements[0] = {"temp.", CENTER}; 
+    elements[1] = {local_temperature, BOTTOM_LEFT_CORNER}; 
 
-    elements[0] = {
-        .text = "temp.", 
-        .position = CENTER, 
-    }; 
-
-    elements[1] = {
-        .text = "SOMETHING", 
-        .position = BOTTOM_LEFT_CORNER, 
-    };
-
-    Serial.print("Returning from temp: "); 
+    Serial.print("Element in temperature: "); 
     Serial.println(elements[0].text); 
+    //return elements;
 }
 
-Layout get_temperature_layout(Screen screen, int pin) 
+Layout get_temperature_layout(Screen screen, int _local_temperature_pin) 
 {
+    local_temperature_pin = _local_temperature_pin; 
 
     return {
         .screen = screen,    

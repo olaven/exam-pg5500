@@ -71,7 +71,7 @@ LayoutState setup_layout_state(
     int _next_button_pin,
     int _previous_button_pin,
     int total_layout_count,
-    Layout *layouts)
+    Layout layouts[])
 {
 
     next_button_pin = _next_button_pin;

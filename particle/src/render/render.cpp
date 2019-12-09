@@ -33,17 +33,14 @@ void render_current_layout(LayoutState * layout_state_pointer)
     Screen screen = layout.screen;
     clear_screen(screen);
     
-    Element * elements = (Element*) malloc(sizeof(Element) * layout.element_count); 
-    layout.updated_elements(elements);
-    //Element * elements = layout.updated_elements(); 
-
-    for (int i = 0; i < layout_state_pointer->total_layout_count; i++)
+    Element elements[layout.element_count]; 
+    layout.updated_elements(elements);  
+    for (int i = 0; i < layout.element_count; i++)
     {
         Element element = elements[i];         
+
         render_element(screen, element.text, element.position);
     }
-
-    free(elements); //NOTE: important
 }
 
 int layout_has_changed(LayoutState * layout_state_pointer) 
@@ -59,7 +56,7 @@ void render(LayoutState * layout_state_pointer)
     static int render_count = 0; 
     listen_for_layout_change(layout_state_pointer);
     
-    if (layout_has_changed(layout_state_pointer) || render_count == 0) 
+    if (layout_has_changed(layout_state_pointer) || render_count == 0) //TODO: add back 
     {
         render_count++; 
         render_current_layout(layout_state_pointer); 

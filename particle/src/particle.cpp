@@ -1,3 +1,9 @@
+/******************************************************/
+//       THIS IS A GENERATED FILE - DO NOT EDIT       //
+/******************************************************/
+
+#include "application.h"
+#line 1 "/Users/olav/Documents/skole/kristiania/5_semester/embedded_systems/eksamen/particle/src/particle.ino"
 #include "Adafruit_ST7735.h"
 #include "./render/render.h"
 #include "./layout/layout.h"
@@ -5,6 +11,9 @@
 
 //PINS
 // -- screen 
+void setup();
+void loop();
+#line 8 "/Users/olav/Documents/skole/kristiania/5_semester/embedded_systems/eksamen/particle/src/particle.ino"
 const int screen_cs = A2; 
 const int screen_dc = D0; 
 const int screen_rst = A0; 
@@ -27,7 +36,7 @@ LayoutState layout_state = setup_layout_state(next_button, previous_button, layo
 void setup()
 {
   Serial.begin(9600);
-  Particle.publishVitals(5);
+  Serial.println(NULL);
   setup_screen(screen);
 }
 
