@@ -56,7 +56,8 @@ void render(LayoutState * layout_state_pointer)
     static int render_count = 0; 
     listen_for_layout_change(layout_state_pointer);
     
-    if (layout_has_changed(layout_state_pointer) || render_count == 0) //TODO: add back 
+    //if (layout_has_changed(layout_state_pointer) || render_count == 0) //TODO: add back 
+    if(true)
     {
         render_count++; 
         render_current_layout(layout_state_pointer); 
