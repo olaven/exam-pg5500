@@ -25,6 +25,7 @@ struct Layout
     Screen screen;
     int element_count; 
     void (*updated_elements)(Element elements[MAX_ELEMENT_COUNT]);
+    int update_frequency; 
 };
 
 struct LayoutState

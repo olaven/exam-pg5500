@@ -33,5 +33,6 @@ Layout get_temperature_layout(Screen screen, int _local_temperature_pin)
         .screen = screen,    
         .element_count = element_count, 
         .updated_elements = updated_temperature_elements,
+        .update_frequency = 10000, //i.e. every 10 seconds
     };
 }
