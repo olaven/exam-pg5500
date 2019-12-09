@@ -1,7 +1,11 @@
 #include "../layout/layout.h"
 
-void render_layout(Screen screen, String text, LayoutPosition position)
+void render_element(Screen screen, String text, LayoutPosition position)
 {
+
+    Serial.print("Writing text: "); 
+    Serial.println(text);
+
     switch (position)
     {
     case CENTER:
@@ -23,6 +27,19 @@ void render_layout(Screen screen, String text, LayoutPosition position)
     }
 }
 
+void render_current_layout(LayoutState * layout_state_pointer)
+{
+    Layout layout = layout_state_pointer->layouts[layout_state_pointer->current_layout_index];
+    Screen screen = layout.screen;
+    clear_screen(screen);
+    
+    for (int i = 0; i < layout_state_pointer->total_layout_count; i++)
+    {
+        Element element = layout.elements[i];
+        render_element(screen, element.text, element.position);
+    }
+}
+
 int layout_has_changed(LayoutState * layout_state_pointer) 
 {
     int current = layout_state_pointer->current_layout_index; 
@@ -31,22 +48,14 @@ int layout_has_changed(LayoutState * layout_state_pointer)
 }
 
 
-//TODO: split this function
 void render(LayoutState * layout_state_pointer) 
 {
     static int render_count = 0; 
     listen_for_layout_change(layout_state_pointer);
+    
     if (layout_has_changed(layout_state_pointer) || render_count == 0) 
     {
         render_count++; 
-        Layout layout = layout_state_pointer->layouts[layout_state_pointer->current_layout_index];
-        Screen screen = layout.screen;
-        clear_screen(screen);
-        
-        for (int i = 0; i < layout_state_pointer->total_layout_count; i++)
-        {
-            Element element = layout.elements[i];
-            render_layout(screen, element.text, element.position);
-        }
+        render_current_layout(layout_state_pointer); 
     }
 }

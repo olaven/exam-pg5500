@@ -21,7 +21,8 @@ struct Element
 struct Layout
 {
     Screen screen;
-    Element elements[4];
+    Element * elements;
+    Element * (*updated_elements)();
 };
 
 struct LayoutState

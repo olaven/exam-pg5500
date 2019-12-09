@@ -1,6 +1,6 @@
 #ifndef EMBEDDED_EXAM_MODE_TEMPERATURE
 #define EMBEDDED_EXAM_MODE_TEMPERATURE
 
-//TODO layout for temperature screen
+Layout get_temperature_layout(Screen screen, int pin); 
 
 #endif

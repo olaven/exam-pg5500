@@ -1,61 +1,36 @@
 #include "Adafruit_ST7735.h"
 #include "./render/render.h"
 #include "./layout/layout.h"
-#include "./http/get_test.h"
+#include "./layout/temperature/temperature.h"
 
 Adafruit_ST7735 screen = init_screen(A2, D0, A0);
 
-//TODO: these should be separate screens / folders
 
-struct Layout layouts[3] = {
+struct Element element = {
+    .text = "hei", 
+    .position = CENTER,
+};
+Element elements[1] = {element}; 
+Element * updated_elements() {
+  
+  return elements; 
+}
+struct Layout layouts[1] = {
+  //get_temperature_layout(screen, A1)
   {
-    .screen = screen,   
-    .elements = {
-      {
-        .text = "1center", 
-        .position = CENTER, 
-      }, 
-      {
-        .text = "1bottom", 
-        .position = BOTTOM_LEFT_CORNER, 
-      }, 
-    }
-  }, 
-  {
-    .screen = screen,   
-    .elements = {
-      {
-        .text = "2center", 
-        .position = CENTER, 
-      }, 
-      {
-        .text = "2bottom", 
-        .position = BOTTOM_LEFT_CORNER, 
-      }, 
-    }
-  },
-  {
-    .screen = screen,   
-    .elements = {
-      {
-        .text = "3center", 
-        .position = CENTER, 
-      }, 
-      {
-        .text = "3bottom", 
-        .position = BOTTOM_LEFT_CORNER, 
-      }, 
-    }
+      .screen = screen, 
+      .elements = elements, 
+      .updated_elements = updated_elements,
   }
 };
 
 LayoutState layout_state = setup_layout_state(D2, D1, 3, layouts);
-TCPClient client; 
 
 void setup()
 {
   Serial.begin(9600);
   setup_screen(screen);
+  pinMode(A1, INPUT);
 }
 
 void loop()
