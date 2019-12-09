@@ -3,28 +3,27 @@
 #include "./layout/layout.h"
 #include "./layout/temperature/temperature.h"
 
-Adafruit_ST7735 screen = init_screen(A2, D0, A0);
+//PINS
+// -- screen 
+const int screen_cs = A2; 
+const int screen_dc = D0; 
+const int screen_rst = A0; 
+// -- buttons 
+const int next_button = D2; 
+const int previous_button = D1; 
+// - temperaturen sensor LM35
+const int temperature_sensor = A1; 
 
+const int layout_count = 1; 
 
-struct Element element = {
-    .text = "hei", 
-    .position = CENTER,
+Adafruit_ST7735 screen = init_screen(screen_cs, screen_dc, screen_rst);
+
+Layout temp_layout = get_temperature_layout(screen, temperature_sensor); 
+struct Layout layouts[layout_count] = {
+  temp_layout 
 };
-Element elements[1] = {element}; 
-Element * updated_elements() {
-  
-  return elements; 
-}
-struct Layout layouts[1] = {
-  //get_temperature_layout(screen, A1)
-  {
-      .screen = screen, 
-      .elements = elements, 
-      .updated_elements = updated_elements,
-  }
-};
 
-LayoutState layout_state = setup_layout_state(D2, D1, 3, layouts);
+LayoutState layout_state = setup_layout_state(next_button, previous_button, layout_count, layouts);
 
 void setup()
 {

@@ -8,45 +8,37 @@
 
 static int pin;
 static String local_temperature = "..";
+const int element_count = 2; 
 
 
-Element * update_elements() 
+void updated_temperature_elements(Element * elements) 
 {
-    const int analog_value = analogRead(pin);
+    /* const int analog_value = analogRead(pin);
     float celcius = (0.8 * analog_value / 1024.0);
     
-    local_temperature = String("Inne: ", celcius);
-    Element elements[2] = {
-        {
-            .text = "temp.", 
-            .position = CENTER, 
-        }, 
-        {
-            .text = local_temperature, 
-            .position = BOTTOM_LEFT_CORNER, 
-        }, 
+    local_temperature = String("Inne: ", celcius); */
+
+
+    elements[0] = {
+        .text = "temp.", 
+        .position = CENTER, 
+    }; 
+
+    elements[1] = {
+        .text = "SOMETHING", 
+        .position = BOTTOM_LEFT_CORNER, 
     };
 
-    return elements;
+    Serial.print("Returning from temp: "); 
+    Serial.println(elements[0].text); 
 }
-
 
 Layout get_temperature_layout(Screen screen, int pin) 
 {
-    Element elements[2] = {
-        {
-            .text = "temp.", 
-            .position = CENTER, 
-        }, 
-        {
-            .text = "Some tesxt hello should be local", 
-            .position = BOTTOM_LEFT_CORNER, 
-        }, 
-    };
 
     return {
         .screen = screen,    
-        .elements = elements,
-        .updated_elements = update_elements,
+        .element_count = element_count, 
+        .updated_elements = updated_temperature_elements,
     };
 }

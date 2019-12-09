@@ -3,7 +3,7 @@
 void render_element(Screen screen, String text, LayoutPosition position)
 {
 
-    Serial.print("Writing text: "); 
+    Serial.print("Rendering: "); 
     Serial.println(text);
 
     switch (position)
@@ -33,11 +33,17 @@ void render_current_layout(LayoutState * layout_state_pointer)
     Screen screen = layout.screen;
     clear_screen(screen);
     
+    Element * elements = (Element*) malloc(sizeof(Element) * layout.element_count); 
+    layout.updated_elements(elements);
+    //Element * elements = layout.updated_elements(); 
+
     for (int i = 0; i < layout_state_pointer->total_layout_count; i++)
     {
-        Element element = layout.elements[i];
+        Element element = elements[i];         
         render_element(screen, element.text, element.position);
     }
+
+    free(elements); //NOTE: important
 }
 
 int layout_has_changed(LayoutState * layout_state_pointer) 

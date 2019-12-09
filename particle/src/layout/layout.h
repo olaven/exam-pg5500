@@ -21,8 +21,8 @@ struct Element
 struct Layout
 {
     Screen screen;
-    Element * elements;
-    Element * (*updated_elements)();
+    int element_count; 
+    void (*updated_elements)(Element * elements_buffer);
 };
 
 struct LayoutState
