@@ -15,7 +15,10 @@ const int R = 0;
 
 int button_pin = -1; 
 int lights_pin = -1; 
-int speaker_pin = -1; 
+int speaker_pin = -1;
+
+ // Set overall tempo
+ long tempo = 10000;
 
 int melody[] = {
     E, E, E, R,
@@ -31,8 +34,23 @@ int rest_count = 100;
 int tone_ = 0;
 int beat = 0;
 long duration = 0;
+int MAX_COUNT = sizeof(melody) / 2;
 
-void play_melody() 
+
+
+//NOTE: need to change approach from source, as that approach is blocking.
+int delay_has_passed(int delay_micro)
+{
+    const int now = (millis() * 1000);
+    Serial.print(now);
+    Serial.print(" - ");
+    Serial.print(delay_micro);
+    Serial.print(" - ");
+    Serial.println(now % delay_micro);
+    return (now % delay_micro < 100);
+}
+
+void play_tone()
 {
     long elapsed_time = 0;
     if (tone_ > 0) { // if this isn't a Rest beat, while the tone has
@@ -47,12 +65,23 @@ void play_melody()
             elapsed_time += (tone_);
         }
     }
-    else { // Rest beat; loop times delay
-        for (int j = 0; j < rest_count; j++) { // See NOTE on rest_count
-            delayMicroseconds(duration); 
-        } 
-    }                                
+
 }
+
+void play_melody()
+{
+  for (int i=0; i<MAX_COUNT; i++) {
+    tone_ = melody[i];
+    beat = 50;
+
+    duration = beat * tempo; // Set up timing
+    if (delay_has_passed(duration))
+    {
+        play_tone();
+    }
+  }
+}
+
 
 void setup_christmas_mode(int _button_pin, int _lights_pin, int _speaker_pin)
 {

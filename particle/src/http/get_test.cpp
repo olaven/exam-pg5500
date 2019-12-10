@@ -1,5 +1,13 @@
 #include "Particle.h"
 
+/**
+   NOTE:
+   Calling APIs directly for information should
+   not be done.
+
+   I should use webhooks insatead -> https://docs.particle.io/tutorials/device-cloud/webhooks/
+ */
+
 void setup_get_test(TCPClient client) 
 {
 
@@ -33,7 +41,7 @@ void listen_to_get_test(TCPClient client)
 
         if (!client.connected())
         {
-            Serial.println();
+            serial.println();
             Serial.println("disconnecting.");
             client.stop();
             for(;;);
