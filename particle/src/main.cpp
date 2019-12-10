@@ -43,7 +43,7 @@ void loop()
 
 /*
 
-Todo:
+Todo: 
 - [X] Skjerm  
 - [X] Splitt opp kode 
 - [X] Bytte mellom skjermer med knapp 
