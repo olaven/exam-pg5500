@@ -2,6 +2,8 @@
 
 void render_element(Screen * screen_pointer, String text, LayoutPosition position)
 {
+    Serial.print("Jeg skriver ut: "); 
+    Serial.println(text); 
     switch (position)
     {
     case CENTER:
@@ -27,10 +29,12 @@ void render_current_layout(LayoutState * layout_state_pointer)
 {
     Layout layout = layout_state_pointer->layouts[layout_state_pointer->current_layout_index];
     Screen * screen_pointer = layout.screen;
-    clear_screen(screen_pointer);
 
     Element elements[layout.element_count]; 
-    layout.updated_elements(elements);  
+    layout.updated_elements(elements);
+
+    clear_screen(screen_pointer); 
+
     for (int i = 0; i < layout.element_count; i++)
     {
         Element element = elements[i];         

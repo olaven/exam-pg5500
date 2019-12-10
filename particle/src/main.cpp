@@ -41,7 +41,7 @@ void setup()
 void loop()
 {
   render(&layout_state);
-  christmas_mode();
+  //christmas_mode();
 }
 
 /*
