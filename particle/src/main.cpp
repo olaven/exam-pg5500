@@ -15,7 +15,10 @@ const int screen_rst = A0;
 const int next_button = D2; 
 const int previous_button = D1; 
 // - temperature sensor LM35
-const int temperature_sensor = A1; 
+const int temperature_sensor = A1;
+// - christmas mode 
+const int lights_pin = D3;
+const int speaker_pin = D4;  
 
 SerialDebugOutput debugOutput; //adding extra logging
 
@@ -34,14 +37,14 @@ void setup()
   Particle.publishVitals(5);
 
   setup_screen(&screen);
-  setup_christmas_mode(D5, D3, D4);
+  setup_christmas_mode(lights_pin, speaker_pin);
 }
 
 
 void loop()
 {
   render(&layout_state);
-  //christmas_mode();
+  christmas_mode();
 }
 
 /*

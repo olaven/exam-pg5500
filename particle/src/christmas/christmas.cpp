@@ -13,12 +13,11 @@ const int f = 1580;
 const int G = 1400; 
 const int R = 0; 
 
-int button_pin = -1; 
 int lights_pin = -1; 
 int speaker_pin = -1;
 
  // Set overall tempo
-long tempo = 10000;
+long tempo = 1000;
 
 int melody[] = {
     E, E, E, R,
@@ -30,24 +29,17 @@ int melody[] = {
     E, G, C, D, E, R,
     f, f, f,f, f, E, E, E,  G,G, f, D, C,R 
 };
-int rest_count = 100;
+int rest_count = 10;
 int tone_ = 0;
 int beat = 0;
 long duration = 0;
 int MAX_COUNT = sizeof(melody) / 2;
 
-
-
-//NOTE: need to change approach from source, as that approach is blocking.
-int delay_has_passed(int delay_micro)
+static bool christmas_mode_on = false; 
+int toggle_christmas_mode(String _) 
 {
-    const int now = (millis() * 1000);
-    Serial.print(now);
-    Serial.print(" - ");
-    Serial.print(delay_micro);
-    Serial.print(" - ");
-    Serial.println(now % delay_micro);
-    return (now % delay_micro < 100);
+    christmas_mode_on = !christmas_mode_on;
+    return 1; 
 }
 
 void play_tone()
@@ -57,15 +49,12 @@ void play_tone()
         //  played less long than 'duration', pulse speaker HIGH and LOW
         while (elapsed_time < duration) {
             digitalWrite(speaker_pin,HIGH);
-            delayMicroseconds(tone_ / 2);
-            // DOWN
+            delayMicroseconds(tone_ / 2); 
             digitalWrite(speaker_pin, LOW);
-            delayMicroseconds(tone_ / 2);
-            // Keep track of how long we pulsed
-            elapsed_time += (tone_);
+            delayMicroseconds(tone_ / 2); 
+            elapsed_time += (tone_);   
         }
     }
-
 }
 
 void play_melody()
@@ -75,28 +64,27 @@ void play_melody()
         beat = 50;
 
         duration = beat * tempo; // Set up timing
-        if (delay_has_passed(duration))
-        {
-            play_tone();
-        }
+        delayMicroseconds(duration); 
+        play_tone();
     }
+    toggle_christmas_mode(""); //Turn off when done
 }
 
-
-void setup_christmas_mode(int _button_pin, int _lights_pin, int _speaker_pin)
+void setup_christmas_mode(int _lights_pin, int _speaker_pin)
 {
-    button_pin = _button_pin; 
     lights_pin = _lights_pin; 
     speaker_pin = _speaker_pin; 
 
-    pinMode(button_pin, INPUT); 
     pinMode(lights_pin, OUTPUT); 
     pinMode(speaker_pin, OUTPUT); 
+
+    Particle.function("toggle_christmas_mode", toggle_christmas_mode);
 }
+
 
 void christmas_mode()
 {
-    if (digitalRead(button_pin)) 
+    if (christmas_mode_on) 
     {
         digitalWrite(lights_pin, HIGH); 
         play_melody(); 
