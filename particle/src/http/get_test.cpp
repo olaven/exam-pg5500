@@ -41,7 +41,7 @@ void listen_to_get_test(TCPClient client)
 
         if (!client.connected())
         {
-            serial.println();
+            Serial.println();
             Serial.println("disconnecting.");
             client.stop();
             for(;;);

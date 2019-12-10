@@ -1,19 +1,11 @@
-/******************************************************/
-//       THIS IS A GENERATED FILE - DO NOT EDIT       //
-/******************************************************/
-
-#include "application.h"
-#line 1 "/Users/olav/Documents/skole/kristiania/5_semester/embedded_systems/eksamen/particle/src/particle.ino"
 #include "Adafruit_ST7735.h"
 #include "./render/render.h"
 #include "./layout/layout.h"
 #include "./layout/temperature/temperature.h"
+#include "./christmas/christmas.h"
 
 //PINS
 // -- screen 
-void setup();
-void loop();
-#line 8 "/Users/olav/Documents/skole/kristiania/5_semester/embedded_systems/eksamen/particle/src/particle.ino"
 const int screen_cs = A2; 
 const int screen_dc = D0; 
 const int screen_rst = A0; 
@@ -36,18 +28,22 @@ LayoutState layout_state = setup_layout_state(next_button, previous_button, layo
 void setup()
 {
   Serial.begin(9600);
-  Serial.println(NULL);
+  Particle.publishVitals(5);
+
   setup_screen(screen);
+  setup_christmas_mode(D5, D3, D4);
 }
+
 
 void loop()
 {
   render(&layout_state);
+  christmas_mode();
 }
 
 /*
 
-TODO: 
+Todo:
 - [X] Skjerm  
 - [X] Splitt opp kode 
 - [X] Bytte mellom skjermer med knapp 
@@ -56,7 +52,7 @@ TODO:
   - [ ] Vise neste kollektivtransportmulighet 
   - [ ] Sette stasjon via web-grensesnitt 
 - [ ] Skjerm 2 -> Temperatur
-  - [ ] Temperatursensor
+  - [X] Temperatursensor
   - [ ] Temeperatur fra vaermelding 
 - [ ] Skjerm 3 -> Soevnlogger
   - [ ] Knapp for aa registrere sove/vaakne 
@@ -64,4 +60,7 @@ TODO:
 - [ ] Skjerm 4 -> bilderamme 
   - [ ] Vise bilder 
   - [ ] Vise bilde fra SD-kort
+- [ ] Misc 
+  - [ ] Flammesensor som "brannalarm"
+  - [ ] Christmas mode
 */
