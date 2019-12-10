@@ -18,7 +18,7 @@ int lights_pin = -1;
 int speaker_pin = -1;
 
  // Set overall tempo
- long tempo = 10000;
+long tempo = 10000;
 
 int melody[] = {
     E, E, E, R,
@@ -70,16 +70,16 @@ void play_tone()
 
 void play_melody()
 {
-  for (int i=0; i<MAX_COUNT; i++) {
-    tone_ = melody[i];
-    beat = 50;
+    for (int i=0; i<MAX_COUNT; i++) {
+        tone_ = melody[i];
+        beat = 50;
 
-    duration = beat * tempo; // Set up timing
-    if (delay_has_passed(duration))
-    {
-        play_tone();
+        duration = beat * tempo; // Set up timing
+        if (delay_has_passed(duration))
+        {
+            play_tone();
+        }
     }
-  }
 }
 
 

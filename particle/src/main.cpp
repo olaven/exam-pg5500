@@ -2,26 +2,29 @@
 #include "./render/render.h"
 #include "./layout/layout.h"
 #include "./layout/temperature/temperature.h"
+#include "./layout/clock/clock.h"
 #include "./christmas/christmas.h"
 
 //PINS
-// -- screen 
-const int screen_cs = A2; 
-const int screen_dc = D0; 
-const int screen_rst = A0; 
+// -- SPI - shared
+const int spi_cs = A2;
+// -- screen
+const int screen_dc = D0;
+const int screen_rst = A0;
 // -- buttons 
 const int next_button = D2; 
 const int previous_button = D1; 
 // - temperature sensor LM35
 const int temperature_sensor = A1; 
 
-SerialDebugOutput debugOutput; //ads extra logging
+SerialDebugOutput debugOutput; //adding extra logging
 
-const int layout_count = 1; 
+const int layout_count = 2; 
 
-Adafruit_ST7735 screen = init_screen(screen_cs, screen_dc, screen_rst);
+Adafruit_ST7735 screen = init_screen(spi_cs, screen_dc, screen_rst);
 struct Layout layouts[layout_count] = {
-  get_temperature_layout(screen, temperature_sensor)
+  get_temperature_layout(&screen, temperature_sensor), 
+  get_clock_layout(&screen),
 };
 LayoutState layout_state = setup_layout_state(next_button, previous_button, layout_count, layouts);
 
@@ -30,7 +33,7 @@ void setup()
   Serial.begin(9600);
   Particle.publishVitals(5);
 
-  setup_screen(screen);
+  setup_screen(&screen);
   setup_christmas_mode(D5, D3, D4);
 }
 
@@ -48,7 +51,7 @@ Todo:
 - [X] Splitt opp kode 
 - [X] Bytte mellom skjermer med knapp 
 - [ ] Skjerm 1: 
-  - [ ] Viser klokkeslett
+  - [X] Viser klokkeslett
   - [ ] Vise neste kollektivtransportmulighet 
   - [ ] Sette stasjon via web-grensesnitt 
 - [ ] Skjerm 2 -> Temperatur

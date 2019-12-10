@@ -22,7 +22,7 @@ struct Element
 
 struct Layout
 {
-    Screen screen;
+    Screen * screen;
     int element_count; 
     void (*updated_elements)(Element elements[MAX_ELEMENT_COUNT]);
     int update_frequency; 

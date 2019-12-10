@@ -1,23 +1,23 @@
 #include "../layout/layout.h"
 
-void render_element(Screen screen, String text, LayoutPosition position)
+void render_element(Screen * screen_pointer, String text, LayoutPosition position)
 {
     switch (position)
     {
     case CENTER:
-        write_text(screen, text, 40, 55, 2);
+        write_text(screen_pointer, text, 40, 55, 2);
         break;
     case BOTTOM_LEFT_CORNER:
-        write_text(screen, text, 70, 80, 1);
+        write_text(screen_pointer, text, 70, 80, 1);
         break;
     case BOTTOM_RIGHT_CORNER:
-        write_text(screen, text, 5, 85, 1);
+        write_text(screen_pointer, text, 5, 85, 1);
         break;
     case TOP_LEFT_CORNER:
-        write_text(screen, text, 5, 30, 1);
+        write_text(screen_pointer, text, 5, 30, 1);
         break;
     case TOP_RIGHT_CORNER:
-        write_text(screen, text, 85, 30, 1);
+        write_text(screen_pointer, text, 85, 30, 1);
     default:
         break;
     }
@@ -26,15 +26,15 @@ void render_element(Screen screen, String text, LayoutPosition position)
 void render_current_layout(LayoutState * layout_state_pointer)
 {
     Layout layout = layout_state_pointer->layouts[layout_state_pointer->current_layout_index];
-    Screen screen = layout.screen;
-    clear_screen(screen);
-    
+    Screen * screen_pointer = layout.screen;
+    clear_screen(screen_pointer);
+
     Element elements[layout.element_count]; 
     layout.updated_elements(elements);  
     for (int i = 0; i < layout.element_count; i++)
     {
         Element element = elements[i];         
-        render_element(screen, element.text, element.position);
+        render_element(screen_pointer, element.text, element.position);
     }
 }
 

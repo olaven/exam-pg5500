@@ -3,10 +3,6 @@
 int next_button_pin = -1;
 int previous_button_pin = -1;
 
-/**
- * TODO: This file should be exposed with setup to main ino file 
- */
-
 int buttons_are_valid()
 {
 
@@ -47,24 +43,23 @@ void stay_on_same_layout(LayoutState * layout_state_pointer)
 
 void listen_for_layout_change(LayoutState * layout_state_pointer) 
 {
-    //TODO: avoid multiple triggers (delay?)
-    if (buttons_are_valid()) 
+    if (buttons_are_valid())
     {
         if (digitalRead(next_button_pin))
         {
             to_next_layout(layout_state_pointer);
+            delay(100);
         }
         else if (digitalRead(previous_button_pin))
         {
-            to_previous_layout(layout_state_pointer); 
-        } 
-        else 
+            to_previous_layout(layout_state_pointer);
+            delay(100); 
+        }
+        else
         {
-            stay_on_same_layout(layout_state_pointer); 
+            stay_on_same_layout(layout_state_pointer);
         }
     }
-
-    delay(100); //avoiding going back at once TODO: replace with millis to avoid actually stopping?
 }
 
 LayoutState setup_layout_state(

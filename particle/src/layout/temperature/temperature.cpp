@@ -14,18 +14,13 @@ void updated_temperature_elements(Element elements[MAX_ELEMENT_COUNT])
 {
     const int analog_value = analogRead(local_temperature_pin);
     const int celcius = (int) (80 * analog_value / 1024.0);
-
-    Serial.print("analogue pin: ");
-    Serial.println(local_temperature_pin); 
-    
-    Serial.println(celcius); 
     String local_temperature = "Inne " + String(celcius); 
 
     elements[0] = {"temp.", CENTER}; 
     elements[1] = {local_temperature, BOTTOM_LEFT_CORNER}; 
 }
 
-Layout get_temperature_layout(Screen screen, int _local_temperature_pin) 
+Layout get_temperature_layout(Screen * screen, int _local_temperature_pin) 
 {
     local_temperature_pin = _local_temperature_pin; 
 
