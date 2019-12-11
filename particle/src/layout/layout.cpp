@@ -2,6 +2,7 @@
 
 int next_button_pin = -1;
 int previous_button_pin = -1;
+int change_speaker_pin = -1; 
 
 int buttons_are_valid()
 {
@@ -14,16 +15,20 @@ int buttons_are_valid()
     return 1;
 }
 
+//TODO: fix sound 
 void to_next_layout(LayoutState * layout_state_pointer)
-{
+{    
+    digitalWrite(change_speaker_pin, HIGH); 
     int current = layout_state_pointer->current_layout_index;
     int next = (current + 1) % layout_state_pointer->total_layout_count;
     layout_state_pointer->current_layout_index = next;
     layout_state_pointer->previous_layout_index = current; 
+    digitalWrite(change_speaker_pin, LOW); 
 }
 
 void to_previous_layout(LayoutState * layout_state_pointer)
 {
+    digitalWrite(change_speaker_pin, HIGH); 
     int current = layout_state_pointer->current_layout_index;
     int previous = (current - 1);
     if (previous < 0)
@@ -33,6 +38,7 @@ void to_previous_layout(LayoutState * layout_state_pointer)
 
     layout_state_pointer->current_layout_index = previous;
     layout_state_pointer->previous_layout_index = current; 
+    digitalWrite(change_speaker_pin, LOW); 
 }
 
 void stay_on_same_layout(LayoutState * layout_state_pointer) 
@@ -65,12 +71,14 @@ void listen_for_layout_change(LayoutState * layout_state_pointer)
 LayoutState init_layout_state(
     int _next_button_pin,
     int _previous_button_pin,
+    int _speaker_pin,
     int total_layout_count,
     Layout layouts[])
 {
 
     next_button_pin = _next_button_pin;
     previous_button_pin = _previous_button_pin;
+    change_speaker_pin = _speaker_pin; 
 
     struct LayoutState initial_state = {
         .current_layout_index = 0,

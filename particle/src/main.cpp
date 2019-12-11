@@ -31,23 +31,27 @@ struct Layout layouts[layout_count] = {
   get_temperature_layout(&screen, temperature_sensor), 
   get_clock_layout(&screen),
 };
-LayoutState layout_state = init_layout_state(next_button, previous_button, layout_count, layouts);
+LayoutState layout_state = init_layout_state(next_button, previous_button, speaker_pin, layout_count, layouts);
 
 void setup()
 {
   Serial.begin(9600);
+  Serial.println("going to use setup"); 
   Particle.publishVitals(5);
 
   setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
   sd = init_sd_card(sd_cs); 
+  Serial.println("done with setup");
 }
 
 
 void loop()
 {
-  render(&layout_state);
-  christmas_mode();
+  /* render(&layout_state);
+  christmas_mode();   */
+  Serial.println("in loop, about to call write_image"); 
+  write_image(&screen, "wales.bmp", &sd); 
 }
 
 /*
@@ -56,6 +60,7 @@ Todo:
 - [X] Skjerm  
 - [X] Splitt opp kode 
 - [X] Bytte mellom skjermer med knapp 
+- [ ] Lyd når man bytter mellom skjermer 
 - [ ] Skjerm 1: 
   - [X] Viser klokkeslett
   - [ ] Vise neste kollektivtransportmulighet 
