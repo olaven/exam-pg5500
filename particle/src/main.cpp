@@ -1,4 +1,4 @@
-#include "Adafruit_ST7735.h"
+#include "./sd/sd.h"
 #include "./render/render.h"
 #include "./layout/layout.h"
 #include "./layout/temperature/temperature.h"
@@ -6,11 +6,12 @@
 #include "./christmas/christmas.h"
 
 //PINS
-// -- SPI - shared
-const int spi_cs = A2;
 // -- screen
+const int screen_cs = A2;
 const int screen_dc = D0;
 const int screen_rst = A0;
+// -- sd reader 
+const int sd_cs = D4; 
 // -- buttons 
 const int next_button = D2; 
 const int previous_button = D1; 
@@ -18,18 +19,19 @@ const int previous_button = D1;
 const int temperature_sensor = A1;
 // - christmas mode 
 const int lights_pin = D3;
-const int speaker_pin = D4;  
+const int speaker_pin = D5;  
 
 SerialDebugOutput debugOutput; //adding extra logging
 
 const int layout_count = 2; 
 
-Adafruit_ST7735 screen = init_screen(spi_cs, screen_dc, screen_rst);
+Screen screen = init_screen(screen_cs, screen_dc, screen_rst);
+SD sd; 
 struct Layout layouts[layout_count] = {
   get_temperature_layout(&screen, temperature_sensor), 
   get_clock_layout(&screen),
 };
-LayoutState layout_state = setup_layout_state(next_button, previous_button, layout_count, layouts);
+LayoutState layout_state = init_layout_state(next_button, previous_button, layout_count, layouts);
 
 void setup()
 {
@@ -38,6 +40,7 @@ void setup()
 
   setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
+  sd = init_sd_card(sd_cs); 
 }
 
 
