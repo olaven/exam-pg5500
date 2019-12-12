@@ -1,12 +1,13 @@
 #include "Adafruit_ST7735.h"
 #include "Particle.h"
 #include "screen.h"
+#include "colors.h"
 #include "../sd/sd.h"
 
 
 #define BUFFPIXEL 20
 
-Screen init_screen(int cs, int dc, int rst) 
+Screen init_screen(int cs, int dc, int rst)
 {
     Adafruit_ST7735 screen = Adafruit_ST7735(cs, dc, rst);
     return screen; 
@@ -17,44 +18,42 @@ void setup_screen(Screen * screen_pointer)
     screen_pointer->initG();
     screen_pointer->setRotation(3);
     screen_pointer->invertDisplay(true); 
+    register_color_changers();
 }
 
 void write_text(Screen * screen_pointer, String text, int x, int y, int text_size)
 {
-    //clear_screen(screen_pointer); //NOTE: added for tseting
     screen_pointer->setTextSize(text_size);
     screen_pointer->setCursor(x, y);
-    screen_pointer->setTextColor(ST7735_WHITE, ST7735_BLACK);
-    //screen.setTextWrap(true);
+    screen_pointer->setTextColor(get_selected_text_color(), get_selected_background_color());
     screen_pointer->print(text);
 }
 
 void clear_screen(Screen * screen_pointer) 
 {
     Serial.println("Clearing screen");
-    //TODO: fix clearing
-    //screen_pointer->fillRect(5, 10, 160, 80, ST7735_BLACK);
-    screen_pointer->fillScreen(ST7735_BLACK);
+    screen_pointer->fillScreen(get_selected_background_color());
 }
 
-
+//NOTE: copied from: https://github.com/sumotoy/TFT_ST7735/blob/master/examples/SD_example/SD_example.ino
 uint16_t read16(File &f) {
-  uint16_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read(); // MSB
-  return result;
+    uint16_t result;
+    ((uint8_t *)&result)[0] = f.read(); // LSB
+    ((uint8_t *)&result)[1] = f.read(); // MSB
+    return result;
 }
 
+//NOTE: copied from: https://github.com/sumotoy/TFT_ST7735/blob/master/examples/SD_example/SD_example.ino
 uint32_t read32(File &f) {
-  uint32_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read();
-  ((uint8_t *)&result)[2] = f.read();
-  ((uint8_t *)&result)[3] = f.read(); // MSB
-  return result;
+    uint32_t result;
+    ((uint8_t *)&result)[0] = f.read(); // LSB
+    ((uint8_t *)&result)[1] = f.read();
+    ((uint8_t *)&result)[2] = f.read();
+    ((uint8_t *)&result)[3] = f.read(); // MSB
+    return result;
 }
 
-//NOTE: modified version of: https://github.com/sumotoy/TFT_ST7735/blob/master/examples/SD_example/SD_example.ino
+//NOTE: _modified_ version of: https://github.com/sumotoy/TFT_ST7735/blob/master/examples/SD_example/SD_example.ino
 void write_image(Screen * screen_pointer, String filename, SD * sd_pointer) 
 {
     File bmpFile;
