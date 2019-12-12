@@ -19,7 +19,7 @@ int speaker_pin = -1;
  // Set overall tempo
 long tempo = 1000;
 
-int melody[] = {
+int melody[58] = {
     E, E, E, R,
     E, E, E, R,
     E, G, C, D, E, R,
@@ -33,27 +33,33 @@ int rest_count = 10;
 int tone_ = 0;
 int beat = 0;
 long duration = 0;
-int MAX_COUNT = sizeof(melody) / 2;
+int MAX_COUNT = 58;//sizeof(melody) / 2;
 
 static bool christmas_mode_on = false; 
 int toggle_christmas_mode(String _) 
 {
     christmas_mode_on = !christmas_mode_on;
+    Serial.print("Toggled christmas mode"); 
+    Serial.println(christmas_mode_on); 
     return 1; 
 }
 
-void play_tone()
+void play_tone(bool is_last_tone)
 {
     long elapsed_time = 0;
     if (tone_ > 0) { // if this isn't a Rest beat, while the tone has
         //  played less long than 'duration', pulse speaker HIGH and LOW
-        while (elapsed_time < duration) {
+        while (elapsed_time < duration && !is_last_tone) {
+            Serial.println("pLying tone"); 
             digitalWrite(speaker_pin,HIGH);
             delayMicroseconds(tone_ / 2); 
             digitalWrite(speaker_pin, LOW);
+            Serial.print("tone: "); 
+            Serial.println(tone_); 
             delayMicroseconds(tone_ / 2); 
             elapsed_time += (tone_);   
         }
+        Serial.println("Done playing tone");
     }
 }
 
@@ -65,7 +71,7 @@ void play_melody()
 
         duration = beat * tempo; // Set up timing
         delayMicroseconds(duration); 
-        play_tone();
+        play_tone((i + 1 == MAX_COUNT));
     }
     toggle_christmas_mode(""); //Turn off when done
 }

@@ -41,16 +41,145 @@ void setup()
 
   setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
-  sd = init_sd_card(sd_cs); 
+  Serial.println("before init sd card");
+  sd = init_sd_card(sd_cs);
+  Serial.println("after init sd card");
   Serial.println("done with setup");
 }
 
 
 void loop()
 {
-  /* render(&layout_state);
-  christmas_mode();   */
-  Serial.println("in loop, about to call write_image"); 
+  render(&layout_state);
+  christmas_mode();    
+  
+  //TODO: make image work, trigger through function
+  //Serial.println("In loop"); 
+  //write_image(&screen, "wales.bmp", &sd); 
+}
+
+/*
+
+Todo: 
+- [X] Skjerm  
+- [X] Splitt opp kode 
+- [X] Bytte mellom skjermer med knapp 
+- [ ] Lyd når man bytter mellom skjermer 
+- [ ] Skjerm 1: 
+  - [X] Viser klokkeslett
+  - [ ] Vise neste kollektivtransportmulighet 
+  - [ ] Sette stasjon via web-grensesnitt 
+- [ ] Skjerm 2 -> Temperatur
+  - [X] Temperatursensor
+  - [ ] Temeperatur fra vaermelding 
+- [ ] Skjerm 3 -> Soevnlogger
+  - [ ] Knapp for aa registrere sove/vaakne 
+  - [ ] Lagre dem paa SD-kort 
+- [ ] Skjerm 4 -> bilderamme 
+  - [ ] Vise bilder 
+  - [ ] Vise bilde fra SD-kort
+- [ ] Misc 
+  christmas_mode();   //TODO: test image
+  write_image(&screen, "wales.bmp", &sd); 
+}
+
+/*
+
+Todo: 
+- [X] Skjerm  
+- [X] Splitt opp kode 
+- [X] Bytte mellom skjermer med knapp 
+- [ ] Lyd når man bytter mellom skjermer 
+- [ ] Skjerm 1: 
+  - [X] Viser klokkeslett
+  - [ ] Vise neste kollektivtransportmulighet 
+  - [ ] Sette stasjon via web-grensesnitt 
+- [ ] Skjerm 2 -> Temperatur
+  - [X] Temperatursensor
+  - [ ] Temeperatur fra vaermelding 
+- [ ] Skjerm 3 -> Soevnlogger
+  - [ ] Knapp for aa registrere sove/vaakne 
+  - [ ] Lagre dem paa SD-kort 
+- [ ] Skjerm 4 -> bilderamme 
+  - [ ] Vise bilder 
+  - [ ] Vise bilde fra SD-kort
+- [ ] Misc 
+  christmas_mode();   //TODO: test image
+  write_image(&screen, "wales.bmp", &sd); 
+}
+
+/*
+
+Todo: 
+- [X] Skjerm  
+- [X] Splitt opp kode 
+- [X] Bytte mellom skjermer med knapp 
+- [ ] Lyd når man bytter mellom skjermer 
+- [ ] Skjerm 1: 
+  - [X] Viser klokkeslett
+  - [ ] Vise neste kollektivtransportmulighet 
+  - [ ] Sette stasjon via web-grensesnitt 
+- [ ] Skjerm 2 -> Temperatur
+  - [X] Temperatursensor
+  - [ ] Temeperatur fra vaermelding 
+- [ ] Skjerm 3 -> Soevnlogger
+  - [ ] Knapp for aa registrere sove/vaakne 
+  - [ ] Lagre dem paa SD-kort 
+- [ ] Skjerm 4 -> bilderamme 
+  - [ ] Vise bilder 
+  - [ ] Vise bilde fra SD-kort
+- [ ] Misc 
+  christmas_mode();   //TODO: test image
+  write_image(&screen, "wales.bmp", &sd); 
+}
+
+/*
+
+Todo: 
+- [X] Skjerm  
+- [X] Splitt opp kode 
+- [X] Bytte mellom skjermer med knapp 
+- [ ] Lyd når man bytter mellom skjermer 
+- [ ] Skjerm 1: 
+  - [X] Viser klokkeslett
+  - [ ] Vise neste kollektivtransportmulighet 
+  - [ ] Sette stasjon via web-grensesnitt 
+- [ ] Skjerm 2 -> Temperatur
+  - [X] Temperatursensor
+  - [ ] Temeperatur fra vaermelding 
+- [ ] Skjerm 3 -> Soevnlogger
+  - [ ] Knapp for aa registrere sove/vaakne 
+  - [ ] Lagre dem paa SD-kort 
+- [ ] Skjerm 4 -> bilderamme 
+  - [ ] Vise bilder 
+  - [ ] Vise bilde fra SD-kort
+- [ ] Misc 
+  christmas_mode();   //TODO: test image
+  write_image(&screen, "wales.bmp", &sd); 
+}
+
+/*
+
+Todo: 
+- [X] Skjerm  
+- [X] Splitt opp kode 
+- [X] Bytte mellom skjermer med knapp 
+- [ ] Lyd når man bytter mellom skjermer 
+- [ ] Skjerm 1: 
+  - [X] Viser klokkeslett
+  - [ ] Vise neste kollektivtransportmulighet 
+  - [ ] Sette stasjon via web-grensesnitt 
+- [ ] Skjerm 2 -> Temperatur
+  - [X] Temperatursensor
+  - [ ] Temeperatur fra vaermelding 
+- [ ] Skjerm 3 -> Soevnlogger
+  - [ ] Knapp for aa registrere sove/vaakne 
+  - [ ] Lagre dem paa SD-kort 
+- [ ] Skjerm 4 -> bilderamme 
+  - [ ] Vise bilder 
+  - [ ] Vise bilde fra SD-kort
+- [ ] Misc 
+  christmas_mode();   //TODO: test image
   write_image(&screen, "wales.bmp", &sd); 
 }
 
