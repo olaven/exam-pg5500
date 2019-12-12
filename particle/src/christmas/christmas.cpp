@@ -6,11 +6,11 @@
     https://github.com/AbhishekGhosh/Arduino-Buzzer-Tone-Codes/blob/master/Jingle-bells.ino
 */
 
-const int C = 2100; 
-const int D = 1870; 
-const int E = 1670; 
-const int f = 1580; 
-const int G = 1400; 
+const int C = 2100 / 3; 
+const int D = 1870 / 3; 
+const int E = 1670 / 3; 
+const int f = 1580 / 3; 
+const int G = 1400 / 3; 
 const int R = 0; 
 
 int lights_pin = -1; 
@@ -39,8 +39,6 @@ static bool christmas_mode_on = false;
 int toggle_christmas_mode(String _) 
 {
     christmas_mode_on = !christmas_mode_on;
-    Serial.print("Toggled christmas mode"); 
-    Serial.println(christmas_mode_on); 
     return 1; 
 }
 
@@ -49,17 +47,14 @@ void play_tone(bool is_last_tone)
     long elapsed_time = 0;
     if (tone_ > 0) { // if this isn't a Rest beat, while the tone has
         //  played less long than 'duration', pulse speaker HIGH and LOW
-        while (elapsed_time < duration && !is_last_tone) {
-            Serial.println("pLying tone"); 
+        while (elapsed_time < duration && !is_last_tone) 
+        {
             digitalWrite(speaker_pin,HIGH);
-            delayMicroseconds(tone_ / 2); 
+            delayMicroseconds(tone_ * 2); 
             digitalWrite(speaker_pin, LOW);
-            Serial.print("tone: "); 
-            Serial.println(tone_); 
-            delayMicroseconds(tone_ / 2); 
+            delayMicroseconds(tone_ * 2); 
             elapsed_time += (tone_);   
         }
-        Serial.println("Done playing tone");
     }
 }
 
