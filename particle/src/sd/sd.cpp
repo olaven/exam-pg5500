@@ -4,14 +4,14 @@
 #include "sdios.h"
 
 const int8_t DISABLE_CHIP_SELECT = -1;
-#define SPI_SPEED SD_SCK_MHZ(5)
+//#define SPI_SPEED SD_SCK_MHZ(4)
+#define SPI_SPEED SD_SCK_HZ(4 * MHZ)
 ArduinoOutStream cout(Serial); //NOTE: add back cout
 
 SD init_sd_card(int chip_select_pin) {
     
     SD sd;
-
-    if (!sd.begin(chip_select_pin, SPI_SPEED)) 
+    if(!sd.begin(chip_select_pin, SPI_SPEED))
     {
         cout << F("\nerrorCode: ") << hex << showbase;
         cout << int(sd.card()->errorCode());

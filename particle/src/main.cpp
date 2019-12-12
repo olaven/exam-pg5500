@@ -4,6 +4,7 @@
 #include "./layout/temperature/temperature.h"
 #include "./layout/clock/clock.h"
 #include "./christmas/christmas.h"
+#include "./http/openweathermap.h"
 
 //PINS
 // -- screen
@@ -11,7 +12,7 @@ const int screen_cs = A2;
 const int screen_dc = D0;
 const int screen_rst = A0;
 // -- sd reader 
-const int sd_cs = D4; 
+const int sd_cs = D6;  //TODO: check this 
 // -- buttons 
 const int next_button = D2; 
 const int previous_button = D1; 
@@ -39,20 +40,17 @@ void setup()
   Serial.println("going to use setup"); 
   Particle.publishVitals(5);
 
+  sd = init_sd_card(sd_cs);
   setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
-  Serial.println("before init sd card");
-  sd = init_sd_card(sd_cs);
-  Serial.println("after init sd card");
-  Serial.println("done with setup");
 }
 
 
 void loop()
 {
   render(&layout_state);
-  christmas_mode();    
-  
+  christmas_mode();
+
   //TODO: make image work, trigger through function
   //Serial.println("In loop"); 
   //write_image(&screen, "wales.bmp", &sd); 
