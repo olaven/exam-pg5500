@@ -5,6 +5,7 @@
 #include "./layout/clock/clock.h"
 #include "./layout/message/message.h"
 #include "./christmas/christmas.h"
+#include "./fire/fire.h"
 //#include "./http/openweathermap.h"
 
 //PINS
@@ -19,6 +20,8 @@ const int next_button = D2;
 const int previous_button = D1; 
 // - temperature sensor LM35
 const int temperature_sensor = A1;
+// - fire_sensor
+const int fire_sensor_pin = A7;
 // - christmas mode 
 const int lights_pin = D3;
 const int speaker_pin = D5;  
@@ -39,18 +42,21 @@ LayoutState layout_state = init_layout_state(next_button, previous_button, speak
 void setup()
 {
   Serial.begin(9600);
-  Serial.println("going to use setup"); 
+  
+  
   Particle.publishVitals(5);
 
-    setup_message_updater();
-    //sd = init_sd_card(sd_cs);
-    setup_screen(&screen);
+  setup_fire_sensor(fire_sensor_pin);
+  setup_message_updater();
+  //sd = init_sd_card(sd_cs);
+  setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
 }
 
 
 void loop()
 {
+  check_fire_sensor(); 
   render(&layout_state);
   christmas_mode();
 
