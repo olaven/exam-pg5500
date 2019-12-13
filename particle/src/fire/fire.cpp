@@ -21,9 +21,7 @@ bool is_detecting_fire()
         total += analogRead(fire_sensor_pin);
     }
 
-    int average = total / total_read_count;
-    Serial.println(average); 
-
+    int average = total / total_read_count; 
     return (average > 1000);
 } 
 

@@ -36,7 +36,7 @@ struct Layout layouts[layout_count] = {
   get_temperature_layout(&screen, temperature_sensor), 
   get_clock_layout(&screen),
   get_message_layout(&screen),
-  get_alarm_layout(speaker_pin, &screen),
+  get_alarm_layout(&screen),
 };
 LayoutState layout_state = init_layout_state(next_button, previous_button, speaker_pin, layout_count, layouts);
 
@@ -45,9 +45,11 @@ void setup()
   Serial.begin(9600);
   Particle.publishVitals(5);
 
-  setup_fire_sensor(fire_sensor_pin);
+  sd = init_sd_card(sd_cs);//TODO: figure out what to do with SD
+
   setup_message_updater();
-  sd = init_sd_card(sd_cs);
+  setup_fire_sensor(fire_sensor_pin, false);
+  setup_alarm_io(speaker_pin);
   setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
 }
@@ -55,10 +57,11 @@ void setup()
 
 void loop()
 {
-  //tone(speaker_pin, 440, 200);
   check_fire_sensor(); 
-  render(&layout_state);
+  alarm_listener();
   christmas_mode();
+
+  render(&layout_state);
 
   //TODO: make image work, trigger through function
   //Serial.println("In loop"); 
