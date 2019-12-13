@@ -1,12 +1,4 @@
-#include "Particle.h"
-
-/**
-   NOTE:
-   Calling APIs directly for information should
-   not be done.
-
-   I should use webhooks insatead ->    
- */
+/* #include "Particle.h"
 
 TCPClient * init_weather_client(String location) 
 {
@@ -69,3 +61,4 @@ String get_weather_at(String location)
         return response_string;
     }
 }
+ */

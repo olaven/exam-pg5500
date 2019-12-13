@@ -1,10 +1,11 @@
-#include "./sd/sd.h"
+//#include "./sd/sd.h"
 #include "./render/render.h"
 #include "./layout/layout.h"
 #include "./layout/temperature/temperature.h"
 #include "./layout/clock/clock.h"
+#include "./layout/message/message.h"
 #include "./christmas/christmas.h"
-#include "./http/openweathermap.h"
+//#include "./http/openweathermap.h"
 
 //PINS
 // -- screen
@@ -24,13 +25,14 @@ const int speaker_pin = D5;
 
 SerialDebugOutput debugOutput; //adding extra logging
 
-const int layout_count = 2; 
+const int layout_count = 3; 
 
 Screen screen = init_screen(screen_cs, screen_dc, screen_rst);
 SD sd; 
 struct Layout layouts[layout_count] = {
   get_temperature_layout(&screen, temperature_sensor), 
   get_clock_layout(&screen),
+  get_message_layout(&screen),
 };
 LayoutState layout_state = init_layout_state(next_button, previous_button, speaker_pin, layout_count, layouts);
 
@@ -40,8 +42,9 @@ void setup()
   Serial.println("going to use setup"); 
   Particle.publishVitals(5);
 
-  sd = init_sd_card(sd_cs);
-  setup_screen(&screen);
+    setup_message_updater();
+    //sd = init_sd_card(sd_cs);
+    setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
 }
 
@@ -57,12 +60,15 @@ void loop()
 }
 
 /*
+- [X
 
-Todo: 
-- [X] Skjerm  
+Todo: ] Skjerm  
 - [X] Splitt opp kode 
 - [X] Bytte mellom skjermer med knapp 
 - [ ] Lyd når man bytter mellom skjermer 
+- [ ] Personlig melding 
+- [ ] Publiser sensordata 
+- [ ] Flamme og vannsensor -> varsel ved uvanlig oppfoersel
 - [ ] Skjerm 1: 
   - [X] Viser klokkeslett
   - [ ] Vise neste kollektivtransportmulighet 
