@@ -3,6 +3,7 @@
 #include "./layout/layout.h"
 #include "./layout/temperature/temperature.h"
 #include "./layout/clock/clock.h"
+#include "./layout/alarm/alarm.h"
 #include "./layout/message/message.h"
 #include "./christmas/christmas.h"
 #include "./fire/fire.h"
@@ -21,20 +22,21 @@ const int previous_button = D1;
 // - temperature sensor
 const int temperature_sensor = A1;
 // - fire_sensor
-const int fire_sensor_pin = A7;
+const int fire_sensor_pin = A6;
 // - christmas mode 
 const int lights_pin = D3;
-const int speaker_pin = D5;  
+const int speaker_pin = RX;  
 
 SerialDebugOutput debugOutput; //adding extra logging
 Screen screen = init_screen(screen_cs, screen_dc, screen_rst);
 SD sd;
 
-const int layout_count = 3;
+const int layout_count = 4;
 struct Layout layouts[layout_count] = {
   get_temperature_layout(&screen, temperature_sensor), 
   get_clock_layout(&screen),
   get_message_layout(&screen),
+  get_alarm_layout(speaker_pin, &screen),
 };
 LayoutState layout_state = init_layout_state(next_button, previous_button, speaker_pin, layout_count, layouts);
 
@@ -53,6 +55,7 @@ void setup()
 
 void loop()
 {
+  //tone(speaker_pin, 440, 200);
   check_fire_sensor(); 
   render(&layout_state);
   christmas_mode();
