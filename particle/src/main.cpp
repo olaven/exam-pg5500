@@ -27,12 +27,10 @@ const int lights_pin = D3;
 const int speaker_pin = D5;  
 
 SerialDebugOutput debugOutput; //adding extra logging
-
-const int layout_count = 3; 
-
 Screen screen = init_screen(screen_cs, screen_dc, screen_rst);
 SD sd;
 
+const int layout_count = 3;
 struct Layout layouts[layout_count] = {
   get_temperature_layout(&screen, temperature_sensor), 
   get_clock_layout(&screen),
