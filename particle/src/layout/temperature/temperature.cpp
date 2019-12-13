@@ -14,7 +14,7 @@ void updated_temperature_elements(Element elements[MAX_ELEMENT_COUNT])
 {
     const int analog_value = analogRead(local_temperature_pin);
     const int celcius = (int) (80 * analog_value / 1024.0);
-    String local_temperature = "Inne " + String(celcius); 
+    String local_temperature = "Inne " + String(celcius) + "C";
 
     elements[0] = {"temp.", CENTER}; 
     elements[1] = {local_temperature, BOTTOM_LEFT_CORNER}; 

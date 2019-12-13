@@ -10,7 +10,7 @@ int average = 0;
 int fire_sensor_pin; 
 
 /**
- * NOTE: This is an adapted 
+ * NOTE: This is a modified 
  * version of the Arduino
  * analog->smoothing example 
 */
@@ -24,8 +24,10 @@ void setup_fire_sensor(int _fire_sensor_pin)
     }
 }
 
+static int previous_average = -1; 
 bool is_detecting_fire()
 {
+    static int initial_average = -1; 
     total = total - readings[read_index];
     readings[read_index] = analogRead(fire_sensor_pin);
     total = total + readings[read_index];
@@ -38,7 +40,14 @@ bool is_detecting_fire()
 
     average = total / num_readings;
 
-    return average > 35;
+    if (initial_average != -1)
+    {
+        initial_average = average;
+    }
+
+    const bool fire_detected = ((average > initial_average) && ((average - initial_average) > 15));
+    previous_average = average;
+    return fire_detected;
 }
 
 void check_fire_sensor() 

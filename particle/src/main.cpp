@@ -18,7 +18,7 @@ const int sd_cs = D6;  //TODO: check this
 // -- buttons 
 const int next_button = D2; 
 const int previous_button = D1; 
-// - temperature sensor LM35
+// - temperature sensor
 const int temperature_sensor = A1;
 // - fire_sensor
 const int fire_sensor_pin = A7;
@@ -31,7 +31,8 @@ SerialDebugOutput debugOutput; //adding extra logging
 const int layout_count = 3; 
 
 Screen screen = init_screen(screen_cs, screen_dc, screen_rst);
-SD sd; 
+SD sd;
+
 struct Layout layouts[layout_count] = {
   get_temperature_layout(&screen, temperature_sensor), 
   get_clock_layout(&screen),
@@ -42,13 +43,11 @@ LayoutState layout_state = init_layout_state(next_button, previous_button, speak
 void setup()
 {
   Serial.begin(9600);
-  
-  
   Particle.publishVitals(5);
 
   setup_fire_sensor(fire_sensor_pin);
   setup_message_updater();
-  //sd = init_sd_card(sd_cs);
+  sd = init_sd_card(sd_cs);
   setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
 }
