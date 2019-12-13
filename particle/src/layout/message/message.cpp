@@ -18,6 +18,7 @@ int update_message(String new_message)
 void setup_message_updater()
 {
     Particle.function("update_message", update_message);
+    Particle.variable("message", message);
 }
 
 void updated_message_elements(Element elements[MAX_ELEMENT_COUNT])
