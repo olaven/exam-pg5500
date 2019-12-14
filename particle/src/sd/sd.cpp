@@ -23,6 +23,35 @@ SD init_sd_card(int chip_select_pin) {
         Serial.println("SD initialized :D"); 
     }
 
-    return sd;
+    return sd; 
 }
 
+void get_filenames_ending_with(String suffix, int sd_cs_pin, String * filenames, int filenames_count)
+{
+    SD sd = init_sd_card(sd_cs_pin);
+    SdFile root; 
+    SdFile file;
+    
+    if (!root.open("/"))
+    {
+        sd.errorHalt("open root failed");
+    }
+    
+    int counter = 0; 
+    while (file.openNext(&root, O_RDONLY) && counter < filenames_count)
+    {
+        char name[50];
+        file.getName(name, 50);
+        String name_as_string = String(name);
+
+        if (name_as_string.toLowerCase().endsWith(suffix))
+        {
+            filenames[counter] = name_as_string; 
+            Serial.print("adding: ");
+            Serial.println(name_as_string);
+        }
+        
+        counter++;
+        file.close();
+    }
+}

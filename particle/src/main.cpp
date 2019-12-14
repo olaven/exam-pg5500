@@ -7,7 +7,7 @@
 #include "./layout/message/message.h"
 #include "./christmas/christmas.h"
 #include "./fire/fire.h"
-//#include "./http/openweathermap.h"
+#include "./water/water.h"
 
 //PINS
 // -- screen
@@ -23,16 +23,18 @@ const int previous_button = D1;
 const int temperature_sensor = A1;
 // - fire_sensor
 const int fire_sensor_pin = A6;
+// - water sensor 
+const int water_sensor_pin = A7; 
 // - christmas mode 
 const int lights_pin = D3;
 const int speaker_pin = RX;  
 
 SerialDebugOutput debugOutput; //adding extra logging
 Screen screen = init_screen(screen_cs, screen_dc, screen_rst);
-SD sd;
+//SD sd;
 
 const int layout_count = 4;
-struct Layout layouts[layout_count] = {
+struct Layout layouts[layout_count] = { //TODO: move this to separate file 
   get_temperature_layout(&screen, temperature_sensor), 
   get_clock_layout(&screen),
   get_message_layout(&screen),
@@ -45,10 +47,11 @@ void setup()
   Serial.begin(9600);
   Particle.publishVitals(5);
 
-  sd = init_sd_card(sd_cs);//TODO: figure out what to do with SD
+  //sd = init_sd_card(sd_cs);//TODO: figure out what to do with SD
 
   setup_message_updater();
   setup_fire_sensor(fire_sensor_pin, false);
+  setup_water_sensor(water_sensor_pin, true); 
   setup_alarm_io(speaker_pin);
   setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
@@ -57,7 +60,11 @@ void setup()
 
 void loop()
 {
-  check_fire_sensor(); 
+  
+  String filenames[20];
+  //get_filenames_ending_with("bmp", sd_cs, filenames, 20);
+  check_fire_sensor();
+  check_water_sensor();
   alarm_listener();
   christmas_mode();
 
@@ -65,31 +72,5 @@ void loop()
 
   //TODO: make image work, trigger through function
   //Serial.println("In loop"); 
-  //write_image(&screen, "wales.bmp", &sd); 
+  //write_image(&screen, "first.BMP", &sd); 
 }
-
-/*
-- [X
-
-Todo: ] Skjerm  
-- [X] Splitt opp kode 
-- [X] Bytte mellom skjermer med knapp 
-- [ ] Lyd når man bytter mellom skjermer 
-- [ ] Personlig melding 
-- [ ] Publiser sensordata 
-- [ ] Flamme og vannsensor -> varsel ved uvanlig oppfoersel
-- [ ] Skjerm 1: 
-  - [X] Viser klokkeslett
-  - [ ] Vise neste kollektivtransportmulighet 
-  - [ ] Sette stasjon via web-grensesnitt 
-- [ ] Skjerm 2 -> Temperatur
-  - [X] Temperatursensor
-  - [ ] Temeperatur fra vaermelding 
-- [ ] Skjerm 3 -> Soevnlogger
-  - [ ] Knapp for aa registrere sove/vaakne 
-  - [ ] Lagre dem paa SD-kort 
-- [ ] Skjerm 4 -> bilderamme 
-  - [ ] Vise bilder 
-  - [ ] Vise bilde fra SD-kort
-- [ ] Misc 
-*/

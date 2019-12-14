@@ -2,13 +2,15 @@
 
 
 int fire_sensor_pin;
-bool send_email; //https://www.youtube.com/watch?v=1EBfxjSFAxQ&feature=youtu.be
+bool send_fire_email; //https://www.youtube.com/watch?v=1EBfxjSFAxQ&feature=youtu.be
+int last_fire_event_publish = -1; 
 
 
 void setup_fire_sensor(int _fire_sensor_pin, bool _send_email)
 {
+    pinMode(_fire_sensor_pin, INPUT);
     fire_sensor_pin = _fire_sensor_pin;
-    send_email = _send_email; 
+    send_fire_email = _send_email; 
 }
 
 bool is_detecting_fire()
@@ -27,10 +29,10 @@ bool is_detecting_fire()
 
 void check_fire_sensor() 
 {
-    if (is_detecting_fire())
+    if (is_detecting_fire() && send_fire_email)
     {
         Serial.println("Detected fire!");
-        if(send_email)
+        if ((millis() - last_fire_event_publish) > 3000000) //i.e. do not sent more than once/5 min
         {
             Particle.publish("fire_event", PRIVATE);
         }
