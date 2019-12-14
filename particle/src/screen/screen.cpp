@@ -2,7 +2,6 @@
 #include "Adafruit_ST7735.h"
 #include "screen.h"
 #include "colors.h"
-#include "../sd/sd.h"
 
 
 #define BUFFPIXEL 20
@@ -29,11 +28,16 @@ void write_text(Screen * screen_pointer, String text, int x, int y, int text_siz
     screen_pointer->print(text);
 }
 
-void clear_screen(Screen * screen_pointer) 
+void clear_screen(Screen *screen_pointer)
 {
     Serial.println("Clearing screen");
     screen_pointer->fillScreen(get_selected_background_color());
 }
+
+/* 
+
+NOTE: commented out, as I have more or less decided to 
+not include SD for this project. 
 
 //NOTE: copied from: https://github.com/sumotoy/TFT_ST7735/blob/master/examples/SD_example/SD_example.ino
 uint16_t read16(File &f) {
@@ -53,44 +57,6 @@ uint32_t read32(File &f) {
     return result;
 }
 
-void list_dir_stuff_test(int cs_pin) 
-{
-
-    SD sd = init_sd_card(cs_pin);
-    SdFile root;
-    SdFile file;
-
-    if (!root.open("/"))
-    {
-        sd.errorHalt("open root failed");
-    }
-    // Open next file in root.
-    // Warning, openNext starts at the current directory position
-    // so a rewind of the directory may be required.
-    while (file.openNext(&root, O_RDONLY))
-    {
-        file.printFileSize(&Serial);
-        Serial.write(' ');
-        file.printModifyDateTime(&Serial);
-        Serial.write(' ');
-        file.printName(&Serial);
-        if (file.isDir())
-        {
-            // Indicate a directory.
-            Serial.write('/');
-        }
-        Serial.println();
-        file.close();
-    }
-    if (root.getError())
-    {
-        Serial.println("openNext failed");
-    }
-    else
-    {
-        Serial.println("Done!");
-    }
-}
 
 //NOTE: _modified_ version of: https://github.com/sumotoy/TFT_ST7735/blob/master/examples/SD_example/SD_example.ino
 void write_image(Screen * screen_pointer, String filename, SD * sd_pointer) 
@@ -196,3 +162,4 @@ void write_image(Screen * screen_pointer, String filename, SD * sd_pointer)
         screen_pointer->print("file unrecognized!");
     }
 }
+ */

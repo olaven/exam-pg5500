@@ -1,5 +1,8 @@
 #include "./layout.h"
 
+#define NOTE_B3 247
+#define NOTE_C4 262
+
 int next_button_pin = -1;
 int previous_button_pin = -1;
 int change_speaker_pin = -1; 
@@ -17,18 +20,17 @@ int buttons_are_valid()
 
 //TODO: fix sound 
 void to_next_layout(LayoutState * layout_state_pointer)
-{    
-    digitalWrite(change_speaker_pin, HIGH); 
+{
+    tone(change_speaker_pin, NOTE_C4, 100);
     int current = layout_state_pointer->current_layout_index;
     int next = (current + 1) % layout_state_pointer->total_layout_count;
     layout_state_pointer->current_layout_index = next;
     layout_state_pointer->previous_layout_index = current; 
-    digitalWrite(change_speaker_pin, LOW); 
 }
 
 void to_previous_layout(LayoutState * layout_state_pointer)
 {
-    digitalWrite(change_speaker_pin, HIGH); 
+    tone(change_speaker_pin, NOTE_B3, 100);
     int current = layout_state_pointer->current_layout_index;
     int previous = (current - 1);
     if (previous < 0)
@@ -38,7 +40,6 @@ void to_previous_layout(LayoutState * layout_state_pointer)
 
     layout_state_pointer->current_layout_index = previous;
     layout_state_pointer->previous_layout_index = current; 
-    digitalWrite(change_speaker_pin, LOW); 
 }
 
 void stay_on_same_layout(LayoutState * layout_state_pointer) 

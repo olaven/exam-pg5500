@@ -1,4 +1,8 @@
-#include <SPI.h>
+/**
+ * NOTE: commented out, as I have more or less decided to quit SD for this project
+ */
+
+/* #include <SPI.h>
 #include "SdFat.h"
 #include "sd.h"
 #include "sdios.h"
@@ -55,3 +59,4 @@ void get_filenames_ending_with(String suffix, int sd_cs_pin, String * filenames,
         file.close();
     }
 }
+ */

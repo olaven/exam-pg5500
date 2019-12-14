@@ -1,4 +1,3 @@
-//#include "./sd/sd.h"
 #include "./render/render.h"
 #include "./layout/layout.h"
 #include "./layout/temperature/temperature.h"
@@ -15,7 +14,7 @@ const int screen_cs = A2;
 const int screen_dc = D0;
 const int screen_rst = A0;
 // -- sd reader 
-const int sd_cs = D6;  //TODO: check this 
+const int sd_cs = D6;  //TODO: remove if not used 
 // -- buttons 
 const int next_button = D2; 
 const int previous_button = D1; 
@@ -31,7 +30,6 @@ const int speaker_pin = RX;
 
 SerialDebugOutput debugOutput; //adding extra logging
 Screen screen = init_screen(screen_cs, screen_dc, screen_rst);
-//SD sd;
 
 const int layout_count = 4;
 struct Layout layouts[layout_count] = { //TODO: move this to separate file 
@@ -47,8 +45,6 @@ void setup()
   Serial.begin(9600);
   Particle.publishVitals(5);
 
-  //sd = init_sd_card(sd_cs);//TODO: figure out what to do with SD
-
   setup_temperature(); 
   setup_message_updater();
   setup_fire_sensor(fire_sensor_pin, false);
@@ -63,15 +59,10 @@ void loop()
 {
   
   String filenames[20];
-//  get_filenames_ending_with("bmp", sd_cs, filenames, 20);
   check_fire_sensor();
   check_water_sensor();
   alarm_listener();
   christmas_mode();
 
   render(&layout_state);
-
-  //TODO: make image work, trigger through function
-  //Serial.println("In loop"); 
-  //write_image(&screen, "first.BMP", &sd); 
 }
