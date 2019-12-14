@@ -49,6 +49,7 @@ void setup()
 
   //sd = init_sd_card(sd_cs);//TODO: figure out what to do with SD
 
+  setup_temperature(); 
   setup_message_updater();
   setup_fire_sensor(fire_sensor_pin, false);
   setup_water_sensor(water_sensor_pin, true); 
@@ -62,7 +63,7 @@ void loop()
 {
   
   String filenames[20];
-  //get_filenames_ending_with("bmp", sd_cs, filenames, 20);
+//  get_filenames_ending_with("bmp", sd_cs, filenames, 20);
   check_fire_sensor();
   check_water_sensor();
   alarm_listener();

@@ -10,10 +10,10 @@ void render_element(Screen * screen_pointer, String text, LayoutPosition positio
         write_text(screen_pointer, text, 40, 55, 2);
         break;
     case BOTTOM_LEFT_CORNER:
-        write_text(screen_pointer, text, 70, 80, 1);
+        write_text(screen_pointer, text, 5, 80, 1);
         break;
     case BOTTOM_RIGHT_CORNER:
-        write_text(screen_pointer, text, 5, 85, 1);
+        write_text(screen_pointer, text, 70, 85, 1);
         break;
     case TOP_LEFT_CORNER:
         write_text(screen_pointer, text, 5, 30, 1);
