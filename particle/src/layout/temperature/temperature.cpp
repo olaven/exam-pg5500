@@ -14,10 +14,10 @@ void updated_temperature_elements(Element elements[MAX_ELEMENT_COUNT])
 {
     const int analog_value = analogRead(local_temperature_pin);
     const int celcius = (int) (80 * analog_value / 1024.0);
-    String local_temperature = "Inne " + String(celcius) + "C";
+    String local_temperature = " -> " + String(celcius) + "c";
 
-    elements[0] = {"temp.", CENTER}; 
-    elements[1] = {local_temperature, BOTTOM_LEFT_CORNER}; 
+    elements[0] = {"temp.", TOP_LEFT_CORNER}; 
+    elements[1] = {local_temperature, CENTER}; 
 }
 
 Layout get_temperature_layout(Screen * screen, int _local_temperature_pin) 

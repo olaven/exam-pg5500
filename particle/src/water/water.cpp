@@ -18,7 +18,7 @@ void setup_water_sensor(int _water_sensor_pin, bool _send_email)
 bool is_detecting_water()
 {
     const int water_value = analogRead(water_sensor_pin);
-    return water_value > 800; 
+    return water_value > 1000; 
 }
 void check_water_sensor()
 {

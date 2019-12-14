@@ -92,19 +92,17 @@ void alarm_listener()
 
 void updated_alarm_elements(Element elements[MAX_ELEMENT_COUNT])
 {
-    String time = Time.format("%H:%M");
-    String alarm_setting = String(alarm_hour) + ":" + String(alarm_minute); 
+    String alarm_setting = "time:" + String(alarm_hour) + ":" + String(alarm_minute); 
 
-    elements[0] = {"conf. in app", BOTTOM_LEFT_CORNER};
-    elements[1] = {time, TOP_LEFT_CORNER};
-    elements[2] = {alarm_setting, CENTER};
+    elements[0] = {"alarm", TOP_LEFT_CORNER};
+    elements[1] = {alarm_setting, CENTER};
 }
 
 Layout get_alarm_layout(Screen *screen)
 {
     return {
         .screen = screen,
-        .element_count = 3,
+        .element_count = 2,
         .updated_elements = updated_alarm_elements,
         .update_frequency = 60000, //i.e. every minute
     };
