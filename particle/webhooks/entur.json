@@ -2,7 +2,7 @@
     "url": "https://api.entur.io/journey-planner/v2/graphql",
     "event": "transport_event",
     "json": {
-        "query": "{trip(dateTime:\"2019-12-23T18:25:43+0100\",from: {place: \"NSR:StopPlace:13825\", name: \"Onsumkrysset\"}, to: {place: \"NSR:StopPlace:59706\", name: \"Kringsjå\"}, arriveBy:true ) {tripPatterns {startTime}}}"
+        "query": "{trip(dateTime:\"{{arrive_by}}\",from: {place: \"NSR:StopPlace:{{{from_id}}}\"}, to: {place: \"NSR:StopPlace:{{{to_id}}}\"}, arriveBy:true ) {tripPatterns {startTime}}}"
     },
     "coreid": "{{{PARTICLE_DEVICE_ID}}}",
     "published_at": "{{{PARTICLE_PUBLISHED_AT}}}",
