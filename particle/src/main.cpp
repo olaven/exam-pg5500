@@ -40,6 +40,22 @@ struct Layout layouts[layout_count] = { //TODO: move this to separate file
 };
 LayoutState layout_state = init_layout_state(next_button, previous_button, speaker_pin, layout_count, layouts);
 
+void test_handler(const char *event, const char *data)
+{
+  
+  Serial.println("---------------------------");
+  Serial.println("Event from entur: " + String(event));
+  Serial.println("Data from entur:  " + String(data));
+
+  int y, M, d, h, m;
+  float s;
+  sscanf(data, "%d-%d-%dT%d:%d:%fZ", &y, &M, &d, &h, &m, &s);
+
+  Serial.println(h); 
+  Serial.println(m),
+  Serial.println("---------------------------");
+}
+
 void setup()
 {
   Serial.begin(9600);
@@ -48,10 +64,13 @@ void setup()
   setup_temperature(); 
   setup_message_updater();
   setup_fire_sensor(fire_sensor_pin, false);
-  setup_water_sensor(water_sensor_pin, true); 
+  setup_water_sensor(water_sensor_pin, true);
   setup_alarm_io(speaker_pin);
   setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
+
+  Particle.subscribe("transport_response", test_handler, MY_DEVICES);
+  Particle.publish("transport_event", "some data", PRIVATE);
 }
 
 
