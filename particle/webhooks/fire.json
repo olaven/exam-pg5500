@@ -1,0 +1,17 @@
+{
+    "event": "fire_event",
+    "url": "https://api.mailgun.net/v3/sandbox1ea9d3baf4244f65ba2510c1849b4989.mailgun.org/messages",
+    "requestType": "POST",
+    "noDefaults": true,
+    "rejectUnauthorized": false,
+    "form": {
+        "to": "olav@sundfoer.com",
+        "from": "Photon <photon@sandbox1ea9d3baf4244f65ba2510c1849b4989.mailgun.org>",
+        "subject": "Fire",
+        "text": "https://youtu.be/1EBfxjSFAxQ"
+    },
+    "auth": {
+        "username": "api",
+        "password": "73ee5f5a030f9f2ec65f047726348cbd-5645b1f9-18c95b61"
+    }
+}

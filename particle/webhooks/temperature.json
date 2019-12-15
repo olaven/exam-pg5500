@@ -1,0 +1,14 @@
+{
+    "event": "temperature",
+    "responseTopic": "temperature_response",
+    "url": "https://api.openweathermap.org/data/2.5/weather",
+    "requestType": "GET",
+    "noDefaults": true,
+    "rejectUnauthorized": false,
+    "responseTemplate": "{{main.temp}}",
+    "query": {
+        "q": "{{city}}",
+        "appid": "a4848996cc1a40d32f997d5d35aed6e5",
+        "units": "metric"
+    }
+}
