@@ -4,6 +4,7 @@
 
 int alarm_hour = -1; 
 int alarm_minute = -1;
+int extra_minutes = 25; 
 String alarm_from_location = "13825"; 
 String alarm_to_location = "6488";
 int arrive_by_hour = 9; 
@@ -34,18 +35,15 @@ int is_valid_input(String input, const int max_value = 999999)
     return as_int <= max_value; 
 }
 
-//TODO: update periodically to account for delays 
 void update_entur_subscription()
 {
     String arrive_by_iso = String::format("%d-%d-%dT%d:%d:43+0100", Time.year(), Time.month(), Time.day(), arrive_by_hour, arrive_by_minute);
-    Serial.println("Before formatting: " + String(alarm_from_location) + " - " + String(alarm_to_location) + " - " + arrive_by_iso);
     String data = String::format(
         "{ \"from_id\": \"%s\", \"to_id\": \"%s\", \"arrive_by\": \"%s\" }", 
         alarm_from_location.c_str(), 
         alarm_to_location.c_str(),
         arrive_by_iso.c_str()
     );
-    Serial.println("sending " + data); 
     Particle.publish("transport_event", data, PRIVATE);
 }
 
@@ -63,6 +61,15 @@ int change_alarm_to_location(String _alarm_to)
     if (!is_valid_input(_alarm_to))
         return -1;
     alarm_to_location = _alarm_to;
+    update_entur_subscription();
+    return 1; 
+}
+
+int change_extra_minutes(String _extra_minutes)
+{
+    if (!is_valid_input(_extra_minutes, 59))
+        return -1; 
+    extra_minutes = _extra_minutes.toInt(); 
     update_entur_subscription();
     return 1; 
 }
@@ -100,17 +107,21 @@ int toggle_alarm_enabled(String _)
     return 0;
 }
 
+int add_extra_time() 
+{
+    alarm_minute = (alarm_minute + extra_minutes) % 60; 
+    if (alarm_minute < extra_minutes)
+        alarm_hour += 1;
+}
+
 void entur_api_handler(const char *event, const char *data)
 {
-    Serial.println("---------------------------");
-
     int y, M, d; 
     float s;
     sscanf(data, "%d-%d-%dT%d:%d:%fZ", &y, &M, &d, &alarm_hour, &alarm_minute, &s);
-
-
+    add_extra_time(); 
+    
     Serial.println("updated alarm to: " + String(alarm_hour) + ":" + String(alarm_minute));
-    Serial.println("---------------------------");
 }
 
 void setup_alarm_io(int _alarm_pin)
@@ -121,18 +132,30 @@ void setup_alarm_io(int _alarm_pin)
 
     Particle.variable("alarm_hour", alarm_hour);
     Particle.variable("alarm_minute", alarm_minute);
+    Particle.variable("extra_minutes", extra_minutes); 
     Particle.variable("alarm_from_location", alarm_from_location);
     Particle.variable("alarm_to_location", alarm_to_location);
 
     Particle.function("change_alarm_from_location", change_alarm_from_location);
     Particle.function("change_alarm_to_location", change_alarm_to_location);
+    Particle.function("change_extra_minutes", change_extra_minutes);
     Particle.function("change_arrive_by_minute", change_arrive_by_minute);
     Particle.function("change_arrive_by_hour", change_arrive_by_hour);
     Particle.function("toggle_alarm_enabled", toggle_alarm_enabled);
 }
 
+
 void alarm_listener()
 {
+    /**
+     * Updating in case of delays/other changes to 
+     * entur data.
+     */
+    if (millis() % 900000 == 0)
+    {
+        Serial.println("Extra update of entur");
+        update_entur_subscription(); 
+    }
 
     const int current_hour = Time.hour(); 
     const int current_minute = Time.minute(); 

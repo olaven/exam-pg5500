@@ -7,3 +7,4 @@
 * legg til screenshot av webhook-config (sladd nøkler)
 * Nasjonalt stoppestedsregister (NSR) -> https://stoppested.entur.org/?stopPlaceId=NSR:StopPlace:13825, logg inn med guest/guest
 * om nøkler
+* om regelmessig oppdatering av alarm

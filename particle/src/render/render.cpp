@@ -2,8 +2,6 @@
 
 void render_element(Screen * screen_pointer, String text, LayoutPosition position)
 {
-    Serial.print("Jeg skriver ut: "); 
-    Serial.println(text); 
     switch (position)
     {
     case CENTER:
