@@ -13,16 +13,12 @@
 const int screen_cs = A2;
 const int screen_dc = D0;
 const int screen_rst = A0;
-// -- sd reader 
-const int sd_cs = D6;  //TODO: remove if not used 
 // -- buttons 
 const int next_button = D2; 
 const int previous_button = D1; 
-// - temperature sensor
+// - sensors
 const int temperature_sensor = A1;
-// - fire_sensor
 const int fire_sensor_pin = A6;
-// - water sensor 
 const int water_sensor_pin = A7; 
 // - christmas mode 
 const int lights_pin = D3;
@@ -59,12 +55,9 @@ void setup()
 
 void loop()
 {
-  
-  String filenames[20];
   check_fire_sensor();
   check_water_sensor();
   alarm_listener();
   christmas_mode();
-
   render(&layout_state);
 }

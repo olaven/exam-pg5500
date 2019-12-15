@@ -30,8 +30,8 @@ void write_text(Screen * screen_pointer, String text, int x, int y, int text_siz
 
 void clear_screen(Screen *screen_pointer)
 {
-    Serial.println("Clearing screen");
-    screen_pointer->fillScreen(get_selected_background_color());
+    const int background_color = get_selected_background_color();
+    screen_pointer->fillScreen(background_color);
 }
 
 /* 
