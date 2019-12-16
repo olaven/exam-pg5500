@@ -5,7 +5,7 @@ import { CallFunction } from "../fetchers/CallFunction.jsx";
 export const Settings = () => {
 
     const test = async () => {
-        const response = await CallFunction("change_background_color", "yellow"); 
+        const response = await CallFunction("change_background_color", "red"); 
 
         console.log(response);
     }

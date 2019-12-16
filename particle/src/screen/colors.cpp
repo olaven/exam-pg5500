@@ -69,12 +69,14 @@ int get_selected_text_color()
 
 int change_background_color(String color_name)
 {
+    Serial.println("got backgrouond color: " + color_name);
     background_color_name = color_name;
     return 0; 
 }
 
 int change_text_color(String color_name)
 {
+    Serial.println("got text color: " + color_name);
     text_color_name = color_name;
     return 0;
 }
