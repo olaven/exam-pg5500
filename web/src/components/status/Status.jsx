@@ -17,14 +17,16 @@ const StatusElement = props => {
 
 export const Status = () => <Container>
     {[
-        ["Custom message"              , "message"            ],
-        ["Hour of next alarm:"         , "alarm_hour"         ],
-        ["Minute of next alarm:"       , "alarm_minute"       ],
-        ["Extra time (minutes)"        , "extra_minutes"      ],
-        ["Background color"            , "background_color"   ],
-        ["Text color"                  , "text_color"         ],
-        ["Temperature inside"          , "inside_temperature" ],
-        ["Temperature outside (in chosen city)", "outside_temperature"],
+        ["Hour of next alarm:"                 , "alarm_hour"            ],
+        ["Minute of next alarm:"               , "alarm_minute"          ],
+        ["Extra time (minutes)"                , "extra_minutes"         ],
+        ["Background color"                    , "background_color"      ],
+        ["Text color"                          , "text_color"            ],
+        ["The alarm is enabled"                , "alarm_enabled_readable"],
+        ["Temperature inside"                  , "inside_temperature"    ],
+        ["Temperature outside (in chosen city)", "outside_temperature"   ],
+        ["Chosen city"                         , "temperature_city"      ],
+        ["Custom message"                      , "message"               ],
     ].map(pair => <StatusElement key={pair[0]} displayName={pair[0]} variableName={pair[1]}/>)
 }
 </Container>

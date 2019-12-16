@@ -9,15 +9,30 @@ export const TextSetting = props => {
     const [argument, setArgument] = React.useState(null);
     const { displayName, functionName } = props;
 
-    const onClick = async () => {
-        console.log("argument", argument);
-        await CallFunction(functionName, argument); //TODO: visual feedback/reload
+    const onClick = () => {
+        
+        CallFunction(functionName, argument); //TODO: visual feedback/reload
     };
 
     return <Segment>
         <Header>{displayName}</Header>
         <Input type={"text"} onChange={(event) => { setArgument(event.target.value) }} />
         <Button onClick={onClick} primary>OK</Button>
+    </Segment>
+}
+
+export const ToggleSetting = props => {
+
+    const { displayName, functionName } = props;
+
+    const onClick = () => {
+
+        CallFunction(functionName); 
+    }
+
+    return <Segment>
+        <Header>{displayName}</Header>
+        <Button onClick={onClick} primary>Toggle</Button>
     </Segment>
 }
 

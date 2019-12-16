@@ -46,7 +46,7 @@ export const getStops = (name) => {
                     return {
                         key: id,
                         value: id, 
-                        text: place.name.value
+                        text: `${place.name.value} - ${place.topographicPlace.name.value}`
                     }
                 });
 

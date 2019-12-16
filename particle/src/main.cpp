@@ -42,6 +42,7 @@ void setup()
 {
   Serial.begin(9600);
   Particle.publishVitals(5);
+  Time.zone(1);
 
   setup_temperature(); 
   setup_message_updater();

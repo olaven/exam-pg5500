@@ -11,7 +11,7 @@ String alarm_to_location = "6488";
 int arrive_by_hour = 9;
 int arrive_by_minute = 15;
 
-boolean alarm_enabled = false;
+boolean alarm_enabled = true;
 String alarm_enabled_readable = "no"; //NOTE: more readable for end user.
 
 void extract_from_iso(String iso_string)
@@ -27,13 +27,16 @@ void entur_api_handler(const char *event, const char *data)
     extract_from_iso(String(data));
     add_extra_time();
 
+    Serial.println("----------------------------------------------------------------------------");
+    Serial.println("Going from " + alarm_from_location + " to " + alarm_to_location);
+    Serial.println("Wanting to arrive by " + String(arrive_by_hour) + ":" + String(arrive_by_minute)); 
+    Serial.println("Extra time needed: " + String(extra_minutes));
     Serial.println("updated alarm to: " + String(alarm_hour) + ":" + String(alarm_minute));
+    Serial.println("----------------------------------------------------------------------------");
 }
 
 void update_entur_subscription()
 {
-
-    Serial.println(String::format("Updating to %d:%d", arrive_by_hour, arrive_by_minute)); 
 
     String arrive_by_iso = String::format("%d-%d-%dT%d:%d:43+0100", Time.year(), Time.month(), Time.day(), arrive_by_hour, arrive_by_minute);
     String data = String::format(
