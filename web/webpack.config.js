@@ -1,9 +1,13 @@
 const webpack = require("webpack");
+var dotenv = require('dotenv').config({
+    path: __dirname + '/.env'
+});
 
-module.exports = (env, argv) => {
+module.exports = () => {
 
+    console.log(dotenv);
     return {
-        entry: './src/index.js',
+        entry: ['babel-polyfill', './src/index.js'],
         module: {
             rules: [
                 {
@@ -14,7 +18,7 @@ module.exports = (env, argv) => {
             ]
         },
         resolve: {
-            extensions: ['*', '.js', '.jsx']
+            extensions: ['.js', '.jsx']
         },
         output: {
             path: __dirname + '/dist',
@@ -27,8 +31,8 @@ module.exports = (env, argv) => {
         },
         plugins: [
             new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify(argv.mode)
-            })
-        ],
+                "process.env": JSON.stringify(dotenv.parsed)
+            }),
+        ]
     };
 };
