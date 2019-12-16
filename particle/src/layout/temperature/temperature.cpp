@@ -19,7 +19,7 @@ int change_temperature_city(String _temperature_city)
 {
     if (_temperature_city.length() <= 0) return -1; 
     temperature_city = _temperature_city; 
-    return 1; 
+    return 0; 
 }
 
 void setup_temperature()

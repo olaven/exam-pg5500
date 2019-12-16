@@ -1,7 +1,14 @@
+# Generell TODO 
+- [ ] GUI for alarm sitt tidspunkt 
+- [ ] Fikse at alarm faktisk ringer
+- [ ] Hente stasjoner i GUI  
+
+
+
 # Dokumentasjon 
 
 * skriv om fronted -> setup med .env
-
+* forskjellige maater aa endre tidspunkt paa (iso/individuel)
 * Koblet opp mye mot cloud (eksponert vars osv.) for aa kunne utvide mer senere 
 * flammemail referanse til IT project  
 * legg til screenshot av webhook-config (sladd nøkler)

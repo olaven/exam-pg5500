@@ -25,6 +25,7 @@ void setup_alarm_io(int _alarm_pin)
     Particle.function("change_extra_minutes", change_extra_minutes);
     Particle.function("change_arrive_by_minute", change_arrive_by_minute);
     Particle.function("change_arrive_by_hour", change_arrive_by_hour);
+    Particle.function("change_arrive_by", change_arrive_by); //TODO: accept iso date
     Particle.function("toggle_alarm_enabled", toggle_alarm_enabled);
 }
 

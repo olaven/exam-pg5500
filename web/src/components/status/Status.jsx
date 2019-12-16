@@ -1,15 +1,28 @@
 import * as React from "react"; 
-import { Container, Header, Segment } from "semantic-ui-react";
-import { getVariable } from "../fetchers/GetVariable.jsx";
+import { Container, Header, Segment, Button } from "semantic-ui-react";
+import { getVariable } from "../../fetchers/GetVariable.jsx";
+
+const useForceUpdate = () => {
+
+    const [tick, setTick] = React.useState(0);
+    const update = React.useCallback(() => {
+        console.log("updating");
+        setTick(tick + 1);
+    }, []);
+
+    return update; 
+}
 
 const StatusElement = props => {
 
     const {displayName, variableName} = props; 
     const value = getVariable(variableName); 
+    const update = useForceUpdate(); 
     
     return <Segment>
         <Header >{displayName}</Header>
         <Header as="h2">{(value || value === 0)? value: "loading..."}</Header>
+        <Button onClick={update} icon="refresh"/>
     </Segment>
 }
 

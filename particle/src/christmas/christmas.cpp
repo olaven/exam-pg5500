@@ -39,7 +39,7 @@ static bool christmas_mode_on = false;
 int toggle_christmas_mode(String _) 
 {
     christmas_mode_on = !christmas_mode_on;
-    return 1; 
+    return 0; 
 }
 
 void play_tone(bool is_last_tone)

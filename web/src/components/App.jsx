@@ -1,7 +1,7 @@
 import * as React from "react"; 
-import { Header, Container, Segment, Grid, Divider } from "semantic-ui-react";
-import { Status } from "./Status.jsx";
-import { Settings } from "./Settings.jsx";
+import { Header, Container, Segment, Grid, Divider, Button } from "semantic-ui-react";
+import { Status } from "./status/Status.jsx";
+import { Settings } from "./settings/Settings.jsx";
 
 export const App = () => <Container>
     <Header as={"h1"} color={"blue"}>GUI - iot-alarm</Header> 

@@ -14,11 +14,17 @@ int arrive_by_minute = 15;
 boolean alarm_enabled = false;
 String alarm_enabled_readable = "no"; //NOTE: more readable for end user.
 
-void entur_api_handler(const char *event, const char *data)
+void extract_from_iso(String iso_string)
 {
     int y, M, d;
     float s;
-    sscanf(data, "%d-%d-%dT%d:%d:%fZ", &y, &M, &d, &alarm_hour, &alarm_minute, &s);
+    sscanf(iso_string, "%d-%d-%dT%d:%d:%fZ", &y, &M, &d, &alarm_hour, &alarm_minute, &s);
+    Serial.println("alarm hour: " + String(alarm_hour) + " alarm minute " + String(alarm_minute) + " from " + iso_string);
+}
+
+void entur_api_handler(const char *event, const char *data)
+{
+    extract_from_iso(String(data));
     add_extra_time();
 
     Serial.println("updated alarm to: " + String(alarm_hour) + ":" + String(alarm_minute));
@@ -58,7 +64,7 @@ int change_alarm_from_location(String _alarm_from)
         return -1;
     alarm_from_location = _alarm_from;
     update_entur_subscription();
-    return 1;
+    return 0;
 }
 
 int change_alarm_to_location(String _alarm_to)
@@ -67,7 +73,7 @@ int change_alarm_to_location(String _alarm_to)
         return -1;
     alarm_to_location = _alarm_to;
     update_entur_subscription();
-    return 1;
+    return 0;
 }
 
 int change_extra_minutes(String _extra_minutes)
@@ -76,7 +82,20 @@ int change_extra_minutes(String _extra_minutes)
         return -1;
     extra_minutes = _extra_minutes.toInt();
     update_entur_subscription();
-    return 1;
+    return 0;
+}
+
+/**
+ * This function accepts an ISO8806 date string, 
+ * and updates the wanted arrival time. 
+ * NOTE: this is not practical with the Particle App. 
+ * Therefore, alternatives with hour/minute are also available (see other functions)
+ */
+int change_arrive_by(String _arrive_by)
+{
+    //TODO: some input validation
+    extract_from_iso(_arrive_by);
+    return 0;
 }
 
 int change_arrive_by_hour(String _arrive_by_hour)
@@ -85,7 +104,7 @@ int change_arrive_by_hour(String _arrive_by_hour)
         return -1;
     arrive_by_hour = _arrive_by_hour.toInt();
     update_entur_subscription();
-    return 1;
+    return 0;
 }
 
 int change_arrive_by_minute(String _arrive_by_minute)
@@ -94,7 +113,7 @@ int change_arrive_by_minute(String _arrive_by_minute)
         return -1;
     arrive_by_minute = _arrive_by_minute.toInt();
     update_entur_subscription();
-    return 1;
+    return 0;
 }
 
 int toggle_alarm_enabled(String _)

@@ -7,7 +7,7 @@
 export const deviceFetch = (name, options) => {
 
     const { DEVICE_ID, ACCESS_TOKEN } = process.env;
-    const url = `https://api.particle.io/v1/devices/${DEVICE_ID}/${name}?arg=blue`;
+    const url = `https://api.particle.io/v1/devices/${DEVICE_ID}/${name}`;
     
     options.headers = {
         ...options.headers, 
