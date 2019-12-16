@@ -2,12 +2,15 @@ import * as React from "react";
 import { CallFunction } from "../../fetchers/CallFunction.jsx";
 import { Segment, Header, Button, Input, Dropdown } from "semantic-ui-react";
 import { getStops } from "../../fetchers/GetStops.jsx";
+import { getVariable } from "../../fetchers/GetVariable.jsx";
 
 
 export const TextSetting = props => {
 
+    const { variableName, displayName, functionName } = props;
+
     const [argument, setArgument] = React.useState(null);
-    const { displayName, functionName } = props;
+    const {value} = getVariable(variableName); 
 
     const onClick = () => {
         
@@ -16,7 +19,7 @@ export const TextSetting = props => {
 
     return <Segment>
         <Header>{displayName}</Header>
-        <Input type={"text"} onChange={(event) => { setArgument(event.target.value) }} />
+        <Input placeholder={value} type={"text"} onChange={(event) => { setArgument(event.target.value) }} />
         <Button onClick={onClick} primary>OK</Button>
     </Segment>
 }

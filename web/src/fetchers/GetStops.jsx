@@ -9,7 +9,6 @@ import * as React from "react";
 export const getStops = (name) => {
 
     const [stops, setStops] = React.useState([]); 
-    console.log(stops);
     React.useEffect(() => {
 
         const fetchPlaces = async () => {

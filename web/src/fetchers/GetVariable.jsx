@@ -3,7 +3,6 @@ import { deviceFetch } from "./common.js";
 
 export const getVariable = (name) => {
 
-
     const [ value, setValue ] = React.useState(null); 
     
     const fetchVariable = async () => {
@@ -19,7 +18,9 @@ export const getVariable = (name) => {
         }
     }
 
-    React.useEffect(() => {fetchVariable()}, [name]);
+    React.useEffect(() => {
+        fetchVariable();
+    }, [name]);
     const update = React.useCallback(fetchVariable, [])
 
     return { value, update }; 
