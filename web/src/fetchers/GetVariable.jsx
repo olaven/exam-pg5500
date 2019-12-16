@@ -5,25 +5,22 @@ export const getVariable = (name) => {
 
 
     const [ value, setValue ] = React.useState(null); 
-
-    React.useEffect(() => {
-
     
-        const fetchVariable = async () => {
+    const fetchVariable = async () => {
 
-            const response = await deviceFetch(name, {});
-            if (response.status === 200) {
+        const response = await deviceFetch(name, {});
+        if (response.status === 200) {
 
-                const json = await response.json();
-                setValue(json.result);
-            } else {
+            const json = await response.json();
+            setValue(json.result);
+        } else {
 
-                setValue(null);
-            }
+            setValue(null);
         }
+    }
 
-        fetchVariable(); 
-    }, [name]);
+    React.useEffect(() => {fetchVariable()}, [name]);
+    const update = React.useCallback(fetchVariable, [])
 
-    return value; 
+    return { value, update }; 
 }

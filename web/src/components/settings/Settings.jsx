@@ -1,10 +1,13 @@
 import * as React from "react"; 
 import { Container, Button, Segment, Input, Header } from "semantic-ui-react";
-import { TextSetting, ArriveBySetting } from "./SettingsInput.jsx";
+import { TextSetting, ArriveBySetting, ExtraTimeSetting, PlaceInput } from "./SettingsInput.jsx";
 
 const Alarm = () => <Segment>
     <Header as="h1">Alarm settings</Header>
     <ArriveBySetting />
+    <ExtraTimeSetting />
+    <PlaceInput displayName="Change your starting location" functionName={"change_alarm_from_location"}/>
+    <PlaceInput displayName="Change your destination" functionName={"change_alarm_to_location"} />
 </Segment>
 
 const General = () => <Segment>
