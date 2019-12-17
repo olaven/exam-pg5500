@@ -33,7 +33,7 @@ void check_water_sensor()
         static int last_water_event_publish = -1;
         if (last_water_event_publish == -1 || ((millis() - last_water_event_publish) > 900000)) //i.e. do not sent more than once/15 min
         {
-            Particle.publish("water_event", String::format("{ \"email\": \"%s\" }", water_email.c_str()));
+            Particle.publish("water_event", String::format("{ \"email\": \"%s\" }", water_email.c_str()), PRIVATE);
             last_water_event_publish = millis(); 
         }
     }

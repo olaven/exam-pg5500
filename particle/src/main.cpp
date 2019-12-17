@@ -28,7 +28,7 @@ SerialDebugOutput debugOutput; //adding extra logging
 Screen screen = init_screen(screen_cs, screen_dc, screen_rst);
 
 const int layout_count = 4;
-struct Layout layouts[layout_count] = { //TODO: move this to separate file 
+struct Layout layouts[layout_count] = {
   get_temperature_layout(&screen, temperature_sensor), 
   get_clock_layout(&screen),
   get_message_layout(&screen),

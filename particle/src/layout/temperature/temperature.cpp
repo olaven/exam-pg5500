@@ -41,7 +41,7 @@ void update_inside_temperature()
 void updated_temperature_elements(Element elements[MAX_ELEMENT_COUNT]) 
 {
     update_inside_temperature(); 
-    Particle.publish("temperature", String::format("{ \"city\": \"%s\" }", temperature_city.c_str()));
+    Particle.publish("temperature", String::format("{ \"city\": \"%s\" }", temperature_city.c_str()), PRIVATE);
 
     elements[0] = {"inside.", TOP_LEFT_CORNER}; 
     elements[1] = {String(inside_temperature), TOP_RIGHT_CORNER};

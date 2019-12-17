@@ -14,7 +14,6 @@ void updated_clock_elements(Element elements[MAX_ELEMENT_COUNT])
 
 Layout get_clock_layout(Screen * screen)
 {
-
     return {
         .screen = screen,
         .element_count = element_count,
