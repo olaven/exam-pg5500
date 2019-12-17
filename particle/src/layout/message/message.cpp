@@ -7,7 +7,7 @@ String message = ":-)";
 
 int update_message(String new_message) 
 {
-    if (new_message.length() < 1 || new_message.length() > 15)
+    if (new_message.length() < 1)
     {
         return -1; 
     }

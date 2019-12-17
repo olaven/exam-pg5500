@@ -9,7 +9,7 @@ String temperature_city = "Oslo"; //can be updated through functions
 void temperature_response_handler(const char *event, const char *data)
 {
     /*
-     * Expects the respons template to be: 
+     * Expects the response template to be: 
      * {{main.temp}}
     */
     outside_temperature = String(data).toInt();

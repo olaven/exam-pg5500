@@ -30,7 +30,8 @@ stor bonus.
 Alarmen kan konfigureres gjennom et webgrensesnitt (i [./web](./web)), blant
 annet. Webgrensesnittet blir beskrevet nærmere [senere](#webgrensesnitt). 
 Man kan også konfigurere alarmen gjennom funksjoner som er tilgjengelige
-i Particle sin app(TODO: link). 
+i Particle sin
+app([iOS](https://apps.apple.com/us/app/particle-iot/id991459054) og [Android](https://play.google.com/store/apps/details?id=io.particle.android.app&hl=en_US)). 
 
 ### Øvrig funksjonalitet
 I tillegg til denne kjernefunksjonaliteten, har jeg laget annen
@@ -96,29 +97,76 @@ Dersom man eier de rette nøklene og eier dingsen, gis det tilgang på: TODO:dob
 * Informasjon om temperature, som valgt by, og temperaturene som leses 
 * Hvorvidt alarmen er aktivert eller ikke 
 * Nåværende fargekonfigurasjoner 
-* Nåværende egendefinert melding 
+* Nåværende egendefinert melding
+* E-post som skal få mail ved skadevarsel
 
 Det eksponeres også relevant funksjonalitet for å endre på denne dataen, som gir 
 masse muligheter for å bygge videre i fremtiden. Har man flere dingser, kan 
 man kombinere flere ting, og få desto flere muligheter. 
 
-ntegrasjoner videre (entur, mailgun, andre eksterne tjenester ogm uligheter) TODO
+Tilkoblingen til nett gjør dessuten at man kan koble andre løsninger på sin
+egen. Dette er svært viktig for min løsning, i og med at kjernefunksjonaliteten 
+bygger på Entur sitt [API for reiseplanlegging](https://developer.entur.org/pages-journeyplanner-journeyplanner).
+Jeg benytter meg også av [Mailgun sitt API]. Disse tjenestene skriver jeg mer om 
+under [integrasjoner](#integrasjoner). 
 
-### Frontend
-#### Setup 
 
-## Hvordan bruke løsningen 
+### Webgrensesnitt
+For å gjøre løsningen mer tilgjengelig for brukeren, har jeg laget et lite
+segrensesnitt som gjørd et enklere å konfigurere alarmen. Her kan man endre
+innstillinger, og se status på alarmen. Grensesnittet kjører HTTP-kall mot 
+[Particle Device Cloud
+API](https://docs.particle.io/reference/device-cloud/api/), og står helt fritt 
+fra den fysiske dingsen. Grensesnittet kommuniserser også med [entur sitt
+API](https://developer.entur.org/pages-nsr-nsr) for Nasjonalt
+Stoppestedsregister, for å gjøre det mer brukervennlig å endre stoppesteder.
 
-## Nytte- og underholdningsverdi
-## Komponenter fra settet 
+#### Oppsett 
+* en `.env`-fil i `./web` som inneholder følgende: 
+  * `DEVICE_ID=my_device_id` (se på dine "devices" i [Particle IDE](https://build.particle.io/build/new))
+  * `ACCESS_TOKEN=my_access_token`(se [her](https://docs.particle.io/reference/device-cloud/api/#generate-an-access-token))
+* installer `node` og `yarn`/`npm`
+* kjøre `yarn dev`/`npm run dev` i `./web`
 
-## Tanker om kode 
+## Integrasjoner 
+TODO: hvilke integrasjoner jeg har, hvor JSON-filene ligger og hvordan de
+funker, overordnet.
+
+Om restriksjoner med gratis-domene i mailgun TODO 
+om nøkler TODO
+## TODO Argumenter emer for Nytte- og underholdningsverdi
+
+## Tanker om kode
+* C++ for første gang her, holder meg nære C 
 ### Overordnet struktur og stil 
 ### UI-"rammeverk"
 ### Reflekter rundt valg av bibliotek 
+## Mulige utvidelser
+TODO: skriv om mulige utvidelser
 
+## Komponenter fra settet 
+* Particle Photon
+* Breadboard
+* Fargeskjerm
+* Flammesensor
+* Vannsensor
+* LM35 temperatursensor
+* Fargeskjerm
+* 2x LED rød
+* 1x LED grønn
+* 3x 220 resistor 
+* 2x push-button (6x6mm)
+* Koblingskabler 
 
 ## Om film
+Jeg har lagt ved flere små filmer. 
+Jeg har delt opp filmene fordi jeg tror det gjør det lettere å vise dingsen. 
+Det er flere funksjoner her, og selv om jeg mener at alle funksjonene har nytte- 
+og/eller underholdningsverdi på en alarmklokke, tror allikevel det hadde blitt 
+litt rotete å stappe alt sammen inn i samme video. 
+* Videoer jeg har lagt ved:
+TODO: listen
+TODO: skrive om alarmlyd som er vond og tidspunkt som allerede stpr i GUI (feil) 
 
 ## Koblingsskjema
 Det er noen avvik i koblingsskjemaet: 
@@ -126,7 +174,7 @@ Det er noen avvik i koblingsskjemaet:
 * Flammesensoren representeres med en grå, infrarød LED
 
 Jeg har lagt ved skjemaet som `.fzz` og `.png`. 
-[!Bilde av skjemaet](./media/sketch.png)
+![Bilde av skjemaet](./media/sketch.png)
 
 ## Kilder 
 

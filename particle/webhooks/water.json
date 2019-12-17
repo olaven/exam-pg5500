@@ -5,7 +5,7 @@
     "noDefaults": true,
     "rejectUnauthorized": false,
     "form": {
-        "to": "olav@sundfoer.com",
+        "to": "{{email}}",
         "from": "Photon <photon@sandbox1ea9d3baf4244f65ba2510c1849b4989.mailgun.org>",
         "subject": "Water",
         "text": "Photon detected some water!"

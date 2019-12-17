@@ -17,7 +17,9 @@ const General = () => <Segment>
         ["Change text color", "change_text_color", "text_color"],
         ["Change background color", "change_background_color", "background_color"],
         ["Change temperature city", "change_temperature_city", "temperature_city"],
-        ["Update custom message", "update_message", "message"]
+        ["Update custom message", "update_message", "message"],
+        ["Change email address for fire events", "change_fire_email", "fire_email"],
+        ["Change email address for water events", "change_water_email", "water_email"],
     ].map(triple => <TextSetting key={triple[0]} displayName={triple[0]} functionName={triple[1]} variableName={triple[2]}/>)}
     <ToggleSetting displayName="Toggle christmas mode" functionName="toggle_christmas_mode" />
 </Segment>

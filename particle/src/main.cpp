@@ -46,7 +46,7 @@ void setup()
 
   setup_temperature(); 
   setup_message_updater();
-  setup_fire_sensor(fire_sensor_pin, false);
+  setup_fire_sensor(fire_sensor_pin, true);
   setup_water_sensor(water_sensor_pin, true);
   setup_alarm(speaker_pin);
   setup_screen(&screen);

@@ -3,14 +3,23 @@
 
 int fire_sensor_pin;
 bool send_fire_email; //https://www.youtube.com/watch?v=1EBfxjSFAxQ&feature=youtu.be
-int last_fire_event_publish = -1; 
+String fire_email = "lagasild@protonmail.com"; //NOTE: anonymous email made for exam purposes 
 
+
+int change_fire_email(String _fire_email) 
+{
+    fire_email = _fire_email; 
+    return 0; 
+}
 
 void setup_fire_sensor(int _fire_sensor_pin, bool _send_email)
 {
     pinMode(_fire_sensor_pin, INPUT);
     fire_sensor_pin = _fire_sensor_pin;
     send_fire_email = _send_email; 
+    
+    Particle.variable("fire_email", fire_email);
+    Particle.function("change_fire_email", change_fire_email);
 }
 
 bool is_detecting_fire()
@@ -24,17 +33,18 @@ bool is_detecting_fire()
     }
 
     int average = total / total_read_count; 
-    return (average > 1000);
+    return (average > 1500);
 } 
 
 void check_fire_sensor() 
 {
     if (is_detecting_fire() && send_fire_email)
     {
-        Serial.println("Detected fire!");
-        if ((millis() - last_fire_event_publish) > 3000000) //i.e. do not sent more than once/5 min
+        static int last_fire_event_publish = -1; //NOTE: only send emails every 5 minutes (300000 ms)                    
+        if (last_fire_event_publish == -1 || ((millis() - last_fire_event_publish) > 300000)) 
         {
-            Particle.publish("fire_event", PRIVATE);
+            Particle.publish("fire_event", String::format("{ \"email\": \"%s\" }", fire_email.c_str()));
+            last_fire_event_publish = millis(); 
         }
     }
 }

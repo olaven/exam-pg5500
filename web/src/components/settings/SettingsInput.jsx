@@ -49,6 +49,7 @@ export const ArriveBySetting = () => {
 
     const onClick = () => {
         
+        console.log("hour: ", hour, "Minute:", minute);
         CallFunction("change_arrive_by_hour", hour);
         CallFunction("change_arrive_by_minute", minute);
     }
