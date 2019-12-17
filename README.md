@@ -1,4 +1,5 @@
 # Dokumentasjon - Eksamen, embedded systems
+Om iot-mulighet for interaksjon med eksterne tjenester, som jeg har brukt 
 
 ## Hva jeg har laget
 Jeg har valgt oppgave B. Med andre ord har oppgaven vært å lage en IOT-dings som
@@ -51,7 +52,8 @@ tilbakemelding til brukeren.
  2. Alarm 
     * Viser tidspunktet for neste alarm 
  3. Melding
-    * Viser en egen hilsen, som brukeren kan legge inn selv (":-)" som default)
+    * Viser en egen hilsen, som brukeren kan legge inn selv (":-)" som default).
+      Tanken min er at dette kan være et notat e.l. om noe man skal huske om morgenen.
  4. Klokke
     * Viser nåværende klokkeslett, dag og måned
    
@@ -87,9 +89,12 @@ med dataen, men at man kan bygge masse tjenester og integrasjoner i samspill med
 det som skjer på Photon-devicen. Webgrensesnittet jeg har laget er et eksempel
 på dette. 
 
-Om iot-mulighet for interaksjon med eksterne tjenester, som jeg har brukt 
+Dersom man eier de rette nøklene og eier dingsen, gis det tilgang på publiserte
+variable, funksjoner og events. Jeg har valgt å gjøre events private, som vil si
+at andre ikke får tilgang på dem. I mitt tilfelle er eventene som sendes i
+utgangspuktet bare av interesser for meg, og ikke for andre. 
 
-Dersom man eier de rette nøklene og eier dingsen, gis det tilgang på: TODO:dobbeltsjekk tilgang
+Jeg eksponerer data om følgende: 
 * Nåværende tidspunkt for alarm 
 * Ekstra tid man trenger til nærmeste stopp 
 * Stasjoner for avreise og ankomst 
@@ -113,7 +118,7 @@ under [integrasjoner](#integrasjoner).
 
 ### Webgrensesnitt
 For å gjøre løsningen mer tilgjengelig for brukeren, har jeg laget et lite
-segrensesnitt som gjørd et enklere å konfigurere alarmen. Her kan man endre
+segrensesnitt som gjør et enklere å konfigurere alarmen. Her kan man endre
 innstillinger, og se status på alarmen. Grensesnittet kjører HTTP-kall mot 
 [Particle Device Cloud
 API](https://docs.particle.io/reference/device-cloud/api/), og står helt fritt 
@@ -137,12 +142,88 @@ om nøkler TODO
 ## TODO Argumenter emer for Nytte- og underholdningsverdi
 
 ## Tanker om kode
-* C++ for første gang her, holder meg nære C 
-### Overordnet struktur og stil 
-### UI-"rammeverk"
+Da jeg begynte å kode, brukte jeg en `.ino`-fil, slik som vi har gjort i
+undervisningen. Jeg skjønte fort at dette kom til å bli veldig upraktisk etter
+hvert som programmet vokste. Av den grunn gikk jeg over til `cpp`-filer. 
+Jeg hadde ikke skrevet `C++` før jeg startet på dette prosjektet. Derimot har
+jeg hatt undervisning i `C` dette semesteret. Jeg bestemte meg derfor for å
+holde meg ganske nærme `C`, og holde meg unna klasser og andre `C++`-spesifikke
+ting. Håpet var å unngå for mange nybeginnerfeil.
+
+### Hovedfil
+Jeg har forsøkt å holde [hovedfilen](particle/src/main.cpp) så oversiktlig som
+mulig. Jeg har ønsket at logikk og "det som faktis skjer" skal ligge et annet
+sted, men at man allikevel skal kunne få en grei forventning av hva programmet
+gjør kun ved å se på `setup` og `loop`-funksjonene.
+
+Funksjoner som klargjør noe (og typisk kjører i `setup`) har "setup" som prefiks
+i navnet sitt. De tingene som sjekkes hver loop (sensorer o.l) gjøres i
+funksjoner som er ment å beskrive handlingen så godt som mulig. Oppdatering av
+skjerm diskuteres under [rendring](#rendring). 
+
+### Rendring
+Noe av det første jeg laget var støtte for å tegne data til TFT-skjermen. Dette
+har jeg etter hvert begynt å se på som et lite "mini-rammeverk". Koden min
+støtter rendring av "Layouts"(`Layout[]`). Et Layout inneholder "Elements"
+(`Element[]`), som består av tekstbiter og forhåndsdefinerte posisjoner som de
+kan vises på. 
+
+```c
+void updated_clock_elements(Element elements[MAX_ELEMENT_COUNT])
+{
+    String time = Time.format("%H:%M");
+    String date = Time.format("%a:%b");
+
+    elements[0] = {time, CENTER};
+    elements[1] = {date, BOTTOM_RIGHT_CORNER}; 
+}
+
+Layout get_clock_layout(Screen * screen)
+{
+    return {
+        .screen = screen,
+        .element_count = element_count,
+        .updated_elements = updated_clock_elements,
+        .update_frequency = 60000, //i.e. every minute
+    };
+}
+```
+
+Utdraget ovenfra er hentet fra [koden for klokkeskjermen](particle/src/layout/clock/clock.cpp). Layoutet har en funksjonspeker som
+oppdaterer elementene, og et tall (her 60000) som bestemmer hvor lang tid det
+skal gå mellom hver oppdatering av skjermen. Forhåndsbestemt
+oppdateringsfrekvens gjør at jeg kan bestemme hvor ofte et layout skal
+oppdateres avhengig av hva som vises. På den måten sparer jeg ressurser, og jeg
+unngår hyppig blinking på skjermen. Klokken oppdateres en gang i minuttet, fordi
+det kun er da det vil være ny, nyttig informasjon til brukeren. 
+
+Når alle layouts følger dette formatet, kan jeg bruke [samme kode](particle/src/render/render.cpp) for å rendre
+alt som skal på skjermen i hele oppgaven: 
+
+```c
+void render_current_layout(LayoutState * layout_state_pointer)
+{
+    Layout layout = layout_state_pointer->layouts[layout_state_pointer->current_layout_index];
+    Screen * screen_pointer = layout.screen;
+
+    Element elements[layout.element_count]; 
+    layout.updated_elements(elements);
+
+    clear_screen(screen_pointer); 
+
+    for (int i = 0; i < layout.element_count; i++)
+    {
+        Element element = elements[i];         
+        render_element(screen_pointer, element.text, element.position);
+    }
+}
+```
+
+
+
 ### Reflekter rundt valg av bibliotek 
 ## Mulige utvidelser
-TODO: skriv om mulige utvidelser
+TODO: skriv om mulige utvidelser/forbedringer (men bruk ordet utvidelser)
 
 ## Komponenter fra settet 
 * Particle Photon
@@ -162,11 +243,23 @@ TODO: skriv om mulige utvidelser
 Jeg har lagt ved flere små filmer. 
 Jeg har delt opp filmene fordi jeg tror det gjør det lettere å vise dingsen. 
 Det er flere funksjoner her, og selv om jeg mener at alle funksjonene har nytte- 
-og/eller underholdningsverdi på en alarmklokke, tror allikevel det hadde blitt 
+og/eller underholdningsverdi på en alarmklokke, tror jeg allikevel det hadde blitt 
 litt rotete å stappe alt sammen inn i samme video. 
-* Videoer jeg har lagt ved:
-TODO: listen
-TODO: skrive om alarmlyd som er vond og tidspunkt som allerede stpr i GUI (feil) 
+### Videoer jeg har lagt ved:
+* [Alarm](./media/alarm.mp4) viser hovedfunksjonaliteten. Dingsen konfigureres
+gjennom webgrensesnittet. Den kommuniserer automatisk med Entur og finner neste
+alarmtidspunkt basert på dataen den blir konfigurert med. Alarmen ringer også i
+videoen. Ringelyden (til slutt) er ikke pen for ørene - man skal jo
+tross alt våkne skikkelig av den. 
+MERK: det er en liten unøyaktighet i videoen: GUI-et viser alarmtidspunktet som
+konfigurert fra start av, til høyre. Denne verdien henger igjen fra tidligere
+testing.
+* [Julemodus](./media/christmas.MOV)
+* Video om skadedetektering, for [ild](./media/fire.MOV) og [vann](./media/water.MOV)
+* [Video om valgfri melding](./media/message.MOV)
+* Demo av [temperatur](./media/temperature.MOV) viser lokalt målt temperatur og
+den fra egenvalgt by, samt endring av valgt by gjennom GUI
+* En kort [video](./media/navigation.MOV) som viser navigering.
 
 ## Koblingsskjema
 Det er noen avvik i koblingsskjemaet: 
@@ -181,9 +274,6 @@ Jeg har lagt ved skjemaet som `.fzz` og `.png`.
 * JEg har tenkta tdette er iot, og at mye derfor bør skje over nett. 
 * C++ for første gang her, holder meg nære C 
 
-- [ ] GUI for alarm sitt tidspunkt 
-- [ ] Fikse at alarm faktisk ringer
-- [ ] Hente stasjoner i GUI  
 
 
 
