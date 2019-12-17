@@ -36,13 +36,6 @@ void entur_api_handler(const char *event, const char *data)
 {
     extract_from_iso(String(data));
     add_extra_time();
-
-    Serial.println("----------------------------------------------------------------------------");
-    Serial.println("Going from " + alarm_from_location + " to " + alarm_to_location);
-    Serial.println("Wanting to arrive by " + String(arrive_by_hour) + ":" + String(arrive_by_minute)); 
-    Serial.println("Extra time needed: " + String(extra_minutes));
-    Serial.println("updated alarm to: " + String(alarm_hour) + ":" + String(alarm_minute));
-    Serial.println("----------------------------------------------------------------------------");
 }
 
 void update_entur_subscription()

@@ -43,7 +43,7 @@ void check_fire_sensor()
         static int last_fire_event_publish = -1; //NOTE: only send emails every 5 minutes (300000 ms)                    
         if (last_fire_event_publish == -1 || ((millis() - last_fire_event_publish) > 300000)) 
         {
-            Particle.publish("fire_event", String::format("{ \"email\": \"%s\" }", fire_email.c_str()));
+            Particle.publish("fire_event", String::format("{ \"email\": \"%s\" }", fire_email.c_str()), PRIVATE);
             last_fire_event_publish = millis(); 
         }
     }
