@@ -39,7 +39,8 @@ ekstra-funksjonalitet i tillegg, som jeg skal beskrive i kommende avsnitt.
 * Alarmen har en skjerm som til en hver tid viser et alarmens status til brukeren. 
 Brukergrensesnittet består av forskjellige "skjermer" (moduser, vinduer e.l.)
 som viser forskjellig informasjon. Man kan bytte mellom disse med å trykke på 
-frem- og tilbake-knapper.
+frem- og tilbake-knapper. Når man bytter, spilles det en liten tone for å gi
+tilbakemelding til brukeren. 
 
 * Følgende skjermer er tilgjengelig: 
  1. Temperatur
@@ -122,7 +123,7 @@ ntegrasjoner videre (entur, mailgun, andre eksterne tjenester ogm uligheter) TOD
 ## Koblingsskjema
 Det er noen avvik i koblingsskjemaet: 
 * Skjermen er ikke den samme, men en som ligner, med PIN-navn på et notat. 
-*
+* Flammesensoren representeres med en grå, infrarød LED
 
 ## Kilder 
 
