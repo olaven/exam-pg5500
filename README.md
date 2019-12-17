@@ -125,6 +125,9 @@ Det er noen avvik i koblingsskjemaet:
 * Skjermen er ikke den samme, men en som ligner, med PIN-navn på et notat. 
 * Flammesensoren representeres med en grå, infrarød LED
 
+Jeg har lagt ved skjemaet som `.fzz` og `.png`. 
+[!Bilde av skjemaet](./media/sketch.png)
+
 ## Kilder 
 
 * JEg har tenkta tdette er iot, og at mye derfor bør skje over nett. 
