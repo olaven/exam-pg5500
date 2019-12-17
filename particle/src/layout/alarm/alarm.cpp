@@ -5,7 +5,7 @@
 
 int alarm_pin = -1;
 
-void setup_alarm_io(int _alarm_pin)
+void setup_alarm(int _alarm_pin)
 {
     alarm_pin = _alarm_pin;
 
@@ -25,29 +25,65 @@ void setup_alarm_io(int _alarm_pin)
     Particle.function("change_extra_minutes", change_extra_minutes);
     Particle.function("change_arrive_by_minute", change_arrive_by_minute);
     Particle.function("change_arrive_by_hour", change_arrive_by_hour);
-    Particle.function("change_arrive_by", change_arrive_by); //TODO: accept iso date
+    Particle.function("change_arrive_by", change_arrive_by); 
     Particle.function("toggle_alarm_enabled", toggle_alarm_enabled);
+}
+
+/*
+    The alarm should be updated temporarily, 
+    to account for traffic delays, changes etc.
+    The update should run every 15 minutes, and 
+    on startup. 
+
+    However, these two conditions must not be met 
+    at the same time, as that could cause a 
+    "race condition", waiting for the response 
+    from entur. 
+
+    In other words, the two conditions must be 
+    mutually exclusive. 
+*/
+bool should_run_update() 
+{
+    static int first_call = -1; 
+    if (first_call < 0)
+    {
+        first_call = millis(); 
+        return true; 
+    }
+    
+    const int five_minutes = 300000; 
+    const int fifteen_minutes = 900000;
+
+    //NOTE: assuming that race condition is avoided if Entur has not responded within 5 minutes.
+    const int time_since_first_call = millis() - first_call;
+    if (time_since_first_call < five_minutes)
+    {
+        return false; 
+    }
+
+    //NOTE: some margin, as running loops take some time 
+    return (millis() % fifteen_minutes < 50);
+}
+
+bool alarm_should_run() 
+{
+    if (!alarm_enabled) return false; 
+
+    const int current_hour = Time.hour();
+    const int current_minute = Time.minute();
+    return (current_hour == alarm_hour && current_minute == alarm_minute);
 }
 
 void alarm_listener()
 {
-    /**
-     * Updating in case of delays/other changes to 
-     * entur data.
-     */
-    static int firstCall = true; 
-    if (millis() % 900000 == 0 || firstCall)
+    if (should_run_update())
     {
         Serial.println("Extra update of entur");
-        firstCall = false; 
         update_entur_subscription(); 
     }
 
-    const int current_hour = Time.hour(); 
-    const int current_minute = Time.minute(); 
-    const bool is_triggered = current_hour == alarm_hour && current_minute == alarm_minute; 
-
-    if (alarm_enabled && is_triggered)
+    if (alarm_should_run())
     {
         tone(alarm_pin, 440, 200);
     }
@@ -56,9 +92,9 @@ void alarm_listener()
 
 void updated_alarm_elements(Element elements[MAX_ELEMENT_COUNT])
 {
-    String next_alarm = "time:" + String(alarm_hour) + ":" + String(alarm_minute); 
+    String next_alarm = String(alarm_hour) + ":" + String(alarm_minute); 
 
-    elements[0] = {"alarm", TOP_LEFT_CORNER};
+    elements[0] = {"next alarm", TOP_LEFT_CORNER};
     elements[1] = {next_alarm, CENTER};
 }
 

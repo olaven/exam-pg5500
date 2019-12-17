@@ -47,7 +47,6 @@ void entur_api_handler(const char *event, const char *data)
 
 void update_entur_subscription()
 {
-
     String arrive_by_iso = String::format("%d-%d-%dT%d:%d:00.000+01:00", Time.year(), Time.month(), Time.day(), arrive_by_hour, arrive_by_minute);
     String data = String::format(
         "{ \"from_id\": \"%s\", \"to_id\": \"%s\", \"arrive_by\": \"%s\" }",

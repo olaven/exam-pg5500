@@ -48,7 +48,7 @@ void setup()
   setup_message_updater();
   setup_fire_sensor(fire_sensor_pin, false);
   setup_water_sensor(water_sensor_pin, true);
-  setup_alarm_io(speaker_pin);
+  setup_alarm(speaker_pin);
   setup_screen(&screen);
   setup_christmas_mode(lights_pin, speaker_pin);
 }
