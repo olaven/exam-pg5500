@@ -35,9 +35,11 @@ void alarm_listener()
      * Updating in case of delays/other changes to 
      * entur data.
      */
-    if (millis() % 900000 == 0)
+    static int firstCall = true; 
+    if (millis() % 900000 == 0 || firstCall)
     {
         Serial.println("Extra update of entur");
+        firstCall = false; 
         update_entur_subscription(); 
     }
 

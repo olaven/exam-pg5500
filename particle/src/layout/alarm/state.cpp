@@ -4,15 +4,15 @@
 
 int alarm_hour = -1;
 int alarm_minute = -1;
-int extra_minutes = 25;
+int extra_minutes = 15;
 
-String alarm_from_location = "13825";
+String alarm_from_location = "59706";
 String alarm_to_location = "6488";
-int arrive_by_hour = 9;
+int arrive_by_hour = 11;
 int arrive_by_minute = 15;
 
 boolean alarm_enabled = true;
-String alarm_enabled_readable = "no"; //NOTE: more readable for end user.
+String alarm_enabled_readable = "yes"; 
 
 void extract_from_iso(String iso_string)
 {
@@ -20,6 +20,16 @@ void extract_from_iso(String iso_string)
     float s;
     sscanf(iso_string, "%d-%d-%dT%d:%d:%fZ", &y, &M, &d, &alarm_hour, &alarm_minute, &s);
     Serial.println("alarm hour: " + String(alarm_hour) + " alarm minute " + String(alarm_minute) + " from " + iso_string);
+}
+
+void add_extra_time()
+{
+    alarm_minute = (alarm_minute - extra_minutes); 
+    if (alarm_minute < 0) 
+    {
+        alarm_hour -= 1; 
+        alarm_minute = 60 - (alarm_minute * -1); 
+    }
 }
 
 void entur_api_handler(const char *event, const char *data)
@@ -48,7 +58,7 @@ void update_entur_subscription()
     Particle.publish("transport_event", data, PRIVATE);
 }
 
-int is_valid_input(String input, const int max_value = 999999)
+int is_valid_input(String input, const int max_value = 999999999)
 {
     for (int i = 0; i < input.length(); i++)
     {
@@ -135,13 +145,6 @@ int toggle_alarm_enabled(String _)
     }
 
     return 0;
-}
-
-void add_extra_time()
-{
-    alarm_minute = (alarm_minute + extra_minutes) % 60;
-    if (alarm_minute < extra_minutes)
-        alarm_hour += 1;
 }
 
 
