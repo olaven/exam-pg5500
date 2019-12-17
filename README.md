@@ -1,5 +1,4 @@
 # Dokumentasjon - Eksamen, embedded systems
-Om iot-mulighet for interaksjon med eksterne tjenester, som jeg har brukt 
 
 ## Hva jeg har laget
 Jeg har valgt oppgave B. Med andre ord har oppgaven vært å lage en IOT-dings som
@@ -23,10 +22,16 @@ forelesning. Jeg bruker meget kort tid hjemme før jeg drar, og spiser ofte
 frokost på veien. Med andre ord står jeg mer eller mindre opp til T-banen. 
 Det er mange positive sider for dette for en student som ikke liker morgener, 
 men det betyr at jeg er sårbar for forsinkelser og endringer i rutetabeller. 
+
+Dette har jeg brent meg på flere ganger, og det hender at jeg er litt for sent
+ute til forelesning, som jeg aller helst vil unngå. 
 Det betyr også at vekkealarmene mine knyttes tett opp til rutetider - det er
 nyttig for meg å få kombinert rutetider og vekking i samme "dings". At den i 
 tillegg kan justere seg etter forsinkelser mer eller mindre i sanntid, er en 
-stor bonus. 
+stor bonus.
+
+Nytteverdien i denne løsningen er derfor høyst reell for meg. 
+
 
 Alarmen kan konfigureres gjennom et webgrensesnitt (i [./web](./web)), blant
 annet. Webgrensesnittet blir beskrevet nærmere [senere](#webgrensesnitt). 
@@ -115,6 +120,9 @@ bygger på Entur sitt [API for reiseplanlegging](https://developer.entur.org/pag
 Jeg benytter meg også av [Mailgun sitt API]. Disse tjenestene skriver jeg mer om 
 under [integrasjoner](#integrasjoner). 
 
+## Oppsett 
+* `cd particle && particle flash DEVICE_NAME`
+
 
 ### Webgrensesnitt
 For å gjøre løsningen mer tilgjengelig for brukeren, har jeg laget et lite
@@ -132,10 +140,90 @@ Stoppestedsregister, for å gjøre det mer brukervennlig å endre stoppesteder.
   * `ACCESS_TOKEN=my_access_token`(se [her](https://docs.particle.io/reference/device-cloud/api/#generate-an-access-token))
 * installer `node` og `yarn`/`npm`
 * kjøre `yarn dev`/`npm run dev` i `./web`
+ 
+## Integrasjoner
+Jeg har benyttet av Particle sin integrasjonsløsning for å hente data fra andre
+tjenester over nettet. Rent konkret har jeg brukt tjenestene:
+* [Entur sin
+reiseplanlegger](https://developer.entur.org/pages-journeyplanner-journeyplanner) 
+* [OpenWeather](https://openweathermap.org/api) for værdata
+* [Mailgun](https://www.mailgun.com/) for å sende mail 
 
-## Integrasjoner 
-TODO: hvilke integrasjoner jeg har, hvor JSON-filene ligger og hvordan de
-funker, overordnet.
+Dette har jeg gjort ved å opprette webhooks i Particle Cloud. Når en webhook
+trigges, kjører den noe som kan tenkes på som et HTTP-"callback". Hvilken URL som skal kalles og
+akkurat hva som skal skje ("hva slags callback det skal være"), utgjør
+definisjonen på hver enkelt webhook. Triggingen av et callback gjør Particle
+gjennom et "event-system". 
+
+En webhook er litt som å trigge et "callback" med å kalle en URL. Hvilken URL
+som skal kalles og akkurat hva som skal skje ("hva slags callback det skal
+være"), utgjør definisjonen på hver enkelt webhook. Triggingen av et callback
+gjør Particle gjennom et "event-system". 
+
+Events kan publiseres fra particle med `Particle.publish`-metoden. Webhooks kan
+tolke data sendt i `publish` med å bruke [variable
+substitution](https://docs.particle.io/reference/device-cloud/webhooks/#variable-substitution)
+og [Moustache Templates](mustache.github.io/mustache.5.html). 
+
+På tilsvarende måte kan man abbonnere (`subscribe`) på svar fra webhook-kallet
+("callback-et"). Da bruker man [Response
+Templates](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data)
+for å tolke dataen. Den ferdigtolkede dataen kommer så inn i en handler i
+particle-koden. 
+
+
+Events kan publiseres fra particle med `Particle.publish("my_event", data,
+PRIVATE)`nt-system". . Webhooks kan tolke data me kan tolke data sendt i
+`publish` med å bruke [Variable
+Substitution](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data)
+og [Moustache
+Templates](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data).
+
+På tilsvarende måte kan man abbonnere (`subscribe`På samme måte  på svar fra
+webhook-kallet ("callback-et"). Da bruker man [Response
+Templates](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data)
+for å tolke dataen. Den ferdigtolkede dataen kommer så inn i en handler i
+particle-koden. 
+
+```json
+{
+    "url": "https://api.entur.io/journey-planner/v2/graphql",
+    "event": "transport_event",
+    "json": {
+        "query": "{trip(dateTime:\"{{arrive_by}}\",from: {place: \"NSR:StopPlace:SOME_EXAMPLE_PLACE\"}, to: {place: \"NSR:StopPlace:OTHER_EXAMPLE_PLACE\"}, arriveBy:true ) {tripPatterns {startTime}}}"
+    },
+    "requestType": "POST",
+    "responseTopic": "transport_response",
+    "responseTemplate": "{{{data.trip.tripPatterns.0.startTime}}}"
+}
+```
+
+Eksempelet over viser en forenklet utgave av den faktiske entur-webhooken. 
+Her spesifiseres URL-en som skal kalles, og hva slags data som skal sendes med.
+`{{arrive_by}}` er et eksempel på Variable Substitution, og henter data fra 
+`publish`-dataen, som bør se ut omtrent som dette: 
+
+```c
+String data = String::format("{ \"arrive_by\": \"%s\" }", arrive_by_iso.c_str());
+Particle.publish("transport_event", data, PRIVATE);
+```
+
+Webhooken har også definert en `resposneTopic`, som gjør at vi kan få tak i
+responsdata med kode omtrent som denne: 
+
+```c
+void entur_api_handler(const char *event, const char *data)
+{
+    extract_from_iso(String(data));
+    add_extra_time();
+}
+
+//.. senere 
+Particle.subscribe("transport_response", entur_api_handler, MY_DEVICES);
+```
+
+Fordi `respnseTemplate` også er definert, vil dataen som `entur_api_handler` får
+inn være hentet ut fra responsobjektet som Entur returnerer. 
 
 Om restriksjoner med gratis-domene i mailgun TODO 
 om nøkler TODO
@@ -221,8 +309,22 @@ void render_current_layout(LayoutState * layout_state_pointer)
 
 
 
-### Reflekter rundt valg av bibliotek 
+### Reflekter rundt valg av bibliotek
+Jeg har brukt [Adafruit_ST7735](https://github.com/menan/adafruit_st7735) for å
+skrive til skjermen. Dette er det eneste eksterne biblioteket jeg bruker. Dette
+er en port av [Adafruit sitt
+originalbibliotek](https://github.com/adafruit/Adafruit-ST7735-Library), til
+Particle. Originalbiblioteket ble senest oppdatert for et par måneder siden, og
+ser ut til å være ganske aktivt vedlikeholdt. Porten som jeg bruker har
+dessverre ikke samme aktivitetsnivå. Det har allikevel fungert fint for meg, og
+siden det er en port, kan dokumenatsjonen til originalbiblioteket gjenbrukes. 
+
+Dessuten ligger biblioteket på Particle sin egen
+["awesome"-liste](https://github.com/particle-iot/awesome-particle). Det har jeg
+tatt som et tegn på at de anbefaler- og bruker det selv. 
+
 ## Mulige utvidelser
+
 TODO: skriv om mulige utvidelser/forbedringer (men bruk ordet utvidelser)
 
 ## Komponenter fra settet 
@@ -267,16 +369,16 @@ Det er noen avvik i koblingsskjemaet:
 * Flammesensoren representeres med en grå, infrarød LED
 
 Jeg har lagt ved skjemaet som `.fzz` og `.png`. 
+
 ![Bilde av skjemaet](./media/sketch.png)
 
 ## Kilder 
 
 * JEg har tenkta tdette er iot, og at mye derfor bør skje over nett. 
-* C++ for første gang her, holder meg nære C 
 
 
 
-
+TODO: fjern under
 # Dokumentasjon 
 
 * skriv om fronted -> setup med .env
