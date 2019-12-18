@@ -1,4 +1,4 @@
-# Dokumentasjon - Eksamen, embedded systems
+ # Dokumentasjon - Eksamen, embedded systems
 
 ## Hva jeg har laget
 Jeg har valgt oppgave B. Med andre ord har oppgaven vært å lage en IOT-dings som
@@ -238,7 +238,7 @@ tatt som et tegn på at de anbefaler- og bruker det selv.
 
 ## Integrasjoner
 Jeg har benyttet Particle sin integrasjonsløsning for å hente data fra andre
-tjenester over nettet. Rent konkret har jeg brukt tjenestene:
+tjenester over nettet. Hent konkret har jeg brukt tjenestene:
 * [Entur sin
 reiseplanlegger](https://developer.entur.org/pages-journeyplanner-journeyplanner) 
 * [OpenWeather](https://openweathermap.org/api) for værdata
@@ -255,24 +255,10 @@ tolke data sendt i `publish` med å bruke [variable
 substitution](https://docs.particle.io/reference/device-cloud/webhooks/#variable-substitution)
 og [Moustache Templates](https://mustache.github.io/mustache.5.html). 
 
-På tilsvarende måte kan man abbonnere (`subscribe`) på svar fra webhook-kallet
+På tilsvarende måte kan man abonnere (`subscribe`) på svar fra webhook-kallet
 ("callback-et"). Da bruker man [Response
 Templates](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data)
-for å tolke dataen. Den ferdigtolkede dataen kommer så inn i en handler i
-particle-koden. 
-
-
-Events kan publiseres fra particle med `Particle.publish("my_event", data,
-PRIVATE)`nt-system". . I Particle kan kan tolke data sendt i
-`publish` med å bruke [Variable
-Substitution](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data)
-og [Moustache
-Templates](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data).
-
-På tilsvarende måte kan man abbonnere (`subscribe`) på svar fra
-webhook-kallet ("callback-et"). Da bruker man [Response
-Templates](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data)
-for å tolke dataen. Den ferdigtolkede dataen kommer så inn i en handler i
+for å tolke dataen. Den ferdigtolkede dataen kommer så inn i en "handler"-funksjon i
 particle-koden. 
 
 ```json
