@@ -389,10 +389,12 @@ Jeg har lagt ved skjemaet som `.fzz` og `.png`.
 ![Bilde av skjemaet](./media/sketch.png)
 
 ## Kilder 
+* "Prosjektslide" fra undervisningen 
 * [Particle sin
   dokumentasjon](https://docs.particle.io/reference/device-os/firmware/photon/)
 * [Entur sin dokumentasjon](https://www.entur.org/for-developers/)
-* "Prosjektslide" fra undervisningen 
+* [Mailgun sin dokumentasjon](https://documentation.mailgun.com)
+* [Open Weater Map sin dokumentasjon](https://openweathermap.org/api)
 * [Eksempel på
   musikk](https://github.com/AbhishekGhosh/Arduino-Buzzer-Tone-Codes/blob/master/Jingle-bells.ino)
 * [Entur/GraphQL-eksempel i python](https://github.com/entur/api-examples/blob/master/journeyplanner/python/journeyplanner-response-to-json.py)
