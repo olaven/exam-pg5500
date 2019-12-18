@@ -52,8 +52,7 @@ tilbakemelding til brukeren.
 * Følgende skjermer er tilgjengelig: 
  1. Temperatur
     * Viser temperaturen inne, som leses med en sensor
-    * Viser temperaturen i egenkonfigurert by (via. webhook TODO: link til senere omtale
-     avwebhooks) 
+    * Viser temperaturen i egenkonfigurert by (via. [webhooks](#integraser))
  2. Alarm 
     * Viser tidspunktet for neste alarm 
  3. Melding
@@ -141,6 +140,100 @@ Stoppestedsregister, for å gjøre det mer brukervennlig å endre stoppesteder.
 * installer `node` og `yarn`/`npm`
 * kjøre `yarn dev`/`npm run dev` i `./web`
  
+ 
+## Tanker om kode
+Da jeg begynte å kode, brukte jeg en `.ino`-fil, slik som vi har gjort i
+undervisningen. Jeg skjønte fort at dette kom til å bli veldig upraktisk etter
+hvert som programmet vokste. Av den grunn gikk jeg over til `cpp`-filer. 
+Jeg hadde ikke skrevet `C++` før jeg startet på dette prosjektet. Derimot har
+jeg hatt undervisning i `C` dette semesteret. Jeg bestemte meg derfor for å
+holde meg ganske nærme `C`, og holde meg unna klasser og andre `C++`-spesifikke
+ting. Håpet var å unngå for mange nybeginnerfeil.
+
+### Hovedfil
+Jeg har forsøkt å holde [hovedfilen](particle/src/main.cpp) så oversiktlig som
+mulig. Jeg har ønsket at logikk og "det som faktis skjer" skal ligge et annet
+sted, men at man allikevel skal kunne få en grei forventning av hva programmet
+gjør kun ved å se på `setup` og `loop`-funksjonene.
+
+Funksjoner som klargjør noe (og typisk kjører i `setup`) har "setup" som prefiks
+i navnet sitt. De tingene som sjekkes hver loop (sensorer o.l) gjøres i
+funksjoner som er ment å beskrive handlingen så godt som mulig. Oppdatering av
+skjerm diskuteres under [rendring](#rendring). 
+
+### Rendring
+Noe av det første jeg laget var støtte for å tegne data til TFT-skjermen. Dette
+har jeg etter hvert begynt å se på som et lite "mini-rammeverk". Koden min
+støtter rendring av "Layouts"(`Layout[]`). Et Layout inneholder "Elements"
+(`Element[]`), som består av tekstbiter og forhåndsdefinerte posisjoner som de
+kan vises på. 
+
+```c
+void updated_clock_elements(Element elements[MAX_ELEMENT_COUNT])
+{
+    String time = Time.format("%H:%M");
+    String date = Time.format("%a:%b");
+
+    elements[0] = {time, CENTER};
+    elements[1] = {date, BOTTOM_RIGHT_CORNER}; 
+}
+
+Layout get_clock_layout(Screen * screen)
+{
+    return {
+        .screen = screen,
+        .element_count = element_count,
+        .updated_elements = updated_clock_elements,
+        .update_frequency = 60000, //i.e. every minute
+    };
+}
+```
+
+Utdraget ovenfra er hentet fra [koden for klokkeskjermen](particle/src/layout/clock/clock.cpp). Layoutet har en funksjonspeker som
+oppdaterer elementene, og et tall (her 60000) som bestemmer hvor lang tid det
+skal gå mellom hver oppdatering av skjermen. Forhåndsbestemt
+oppdateringsfrekvens gjør at jeg kan bestemme hvor ofte et layout skal
+oppdateres avhengig av hva som vises. På den måten sparer jeg ressurser, og jeg
+unngår hyppig blinking på skjermen. Klokken oppdateres en gang i minuttet, fordi
+det kun er da det vil være ny, nyttig informasjon til brukeren. 
+
+Når alle layouts følger dette formatet, kan jeg bruke [samme kode](particle/src/render/render.cpp) for å rendre
+alt som skal på skjermen i hele oppgaven: 
+
+```c
+void render_current_layout(LayoutState * layout_state_pointer)
+{
+    Layout layout = layout_state_pointer->layouts[layout_state_pointer->current_layout_index];
+    Screen * screen_pointer = layout.screen;
+
+    Element elements[layout.element_count]; 
+    layout.updated_elements(elements);
+
+    clear_screen(screen_pointer); 
+
+    for (int i = 0; i < layout.element_count; i++)
+    {
+        Element element = elements[i];         
+        render_element(screen_pointer, element.text, element.position);
+    }
+}
+```
+
+
+### Bibliotek
+Jeg har brukt [Adafruit_ST7735](https://github.com/menan/adafruit_st7735) for å
+skrive til skjermen. Dette er det eneste eksterne biblioteket jeg bruker. Dette
+er en port av [Adafruit sitt
+originalbibliotek](https://github.com/adafruit/Adafruit-ST7735-Library), til
+Particle. Originalbiblioteket ble senest oppdatert for et par måneder siden, og
+ser ut til å være ganske aktivt vedlikeholdt. Porten som jeg bruker har
+dessverre ikke samme aktivitetsnivå. Det har allikevel fungert fint for meg, og
+siden det er en port, kan dokumenatsjonen til originalbiblioteket gjenbrukes. 
+
+Dessuten ligger biblioteket på Particle sin egen
+["awesome"-liste](https://github.com/particle-iot/awesome-particle). Det har jeg
+tatt som et tegn på at de anbefaler- og bruker det selv. 
+
 ## Integrasjoner
 Jeg har benyttet av Particle sin integrasjonsløsning for å hente data fra andre
 tjenester over nettet. Rent konkret har jeg brukt tjenestene:
@@ -225,107 +318,31 @@ Particle.subscribe("transport_response", entur_api_handler, MY_DEVICES);
 Fordi `respnseTemplate` også er definert, vil dataen som `entur_api_handler` får
 inn være hentet ut fra responsobjektet som Entur returnerer. 
 
-Om restriksjoner med gratis-domene i mailgun TODO 
-om nøkler TODO
-## TODO Argumenter emer for Nytte- og underholdningsverdi
+### Begrensninger 
 
-## Tanker om kode
-Da jeg begynte å kode, brukte jeg en `.ino`-fil, slik som vi har gjort i
-undervisningen. Jeg skjønte fort at dette kom til å bli veldig upraktisk etter
-hvert som programmet vokste. Av den grunn gikk jeg over til `cpp`-filer. 
-Jeg hadde ikke skrevet `C++` før jeg startet på dette prosjektet. Derimot har
-jeg hatt undervisning i `C` dette semesteret. Jeg bestemte meg derfor for å
-holde meg ganske nærme `C`, og holde meg unna klasser og andre `C++`-spesifikke
-ting. Håpet var å unngå for mange nybeginnerfeil.
+Fordi jeg bruker en gratiskonto hos Mailgun kan jeg kun sende epost til
+addresser som var godkjent på forhånd. Jeg bruker også et av deres "sandbox
+domains" i stedet for å legge til mitt eget. Dette er først og fremst fordi jeg
+ville identifisert meg selv dersom jeg la til et domene jeg eier.
 
-### Hovedfil
-Jeg har forsøkt å holde [hovedfilen](particle/src/main.cpp) så oversiktlig som
-mulig. Jeg har ønsket at logikk og "det som faktis skjer" skal ligge et annet
-sted, men at man allikevel skal kunne få en grei forventning av hva programmet
-gjør kun ved å se på `setup` og `loop`-funksjonene.
-
-Funksjoner som klargjør noe (og typisk kjører i `setup`) har "setup" som prefiks
-i navnet sitt. De tingene som sjekkes hver loop (sensorer o.l) gjøres i
-funksjoner som er ment å beskrive handlingen så godt som mulig. Oppdatering av
-skjerm diskuteres under [rendring](#rendring). 
-
-### Rendring
-Noe av det første jeg laget var støtte for å tegne data til TFT-skjermen. Dette
-har jeg etter hvert begynt å se på som et lite "mini-rammeverk". Koden min
-støtter rendring av "Layouts"(`Layout[]`). Et Layout inneholder "Elements"
-(`Element[]`), som består av tekstbiter og forhåndsdefinerte posisjoner som de
-kan vises på. 
-
-```c
-void updated_clock_elements(Element elements[MAX_ELEMENT_COUNT])
-{
-    String time = Time.format("%H:%M");
-    String date = Time.format("%a:%b");
-
-    elements[0] = {time, CENTER};
-    elements[1] = {date, BOTTOM_RIGHT_CORNER}; 
-}
-
-Layout get_clock_layout(Screen * screen)
-{
-    return {
-        .screen = screen,
-        .element_count = element_count,
-        .updated_elements = updated_clock_elements,
-        .update_frequency = 60000, //i.e. every minute
-    };
-}
-```
-
-Utdraget ovenfra er hentet fra [koden for klokkeskjermen](particle/src/layout/clock/clock.cpp). Layoutet har en funksjonspeker som
-oppdaterer elementene, og et tall (her 60000) som bestemmer hvor lang tid det
-skal gå mellom hver oppdatering av skjermen. Forhåndsbestemt
-oppdateringsfrekvens gjør at jeg kan bestemme hvor ofte et layout skal
-oppdateres avhengig av hva som vises. På den måten sparer jeg ressurser, og jeg
-unngår hyppig blinking på skjermen. Klokken oppdateres en gang i minuttet, fordi
-det kun er da det vil være ny, nyttig informasjon til brukeren. 
-
-Når alle layouts følger dette formatet, kan jeg bruke [samme kode](particle/src/render/render.cpp) for å rendre
-alt som skal på skjermen i hele oppgaven: 
-
-```c
-void render_current_layout(LayoutState * layout_state_pointer)
-{
-    Layout layout = layout_state_pointer->layouts[layout_state_pointer->current_layout_index];
-    Screen * screen_pointer = layout.screen;
-
-    Element elements[layout.element_count]; 
-    layout.updated_elements(elements);
-
-    clear_screen(screen_pointer); 
-
-    for (int i = 0; i < layout.element_count; i++)
-    {
-        Element element = elements[i];         
-        render_element(screen_pointer, element.text, element.position);
-    }
-}
-```
-
-
-
-### Reflekter rundt valg av bibliotek
-Jeg har brukt [Adafruit_ST7735](https://github.com/menan/adafruit_st7735) for å
-skrive til skjermen. Dette er det eneste eksterne biblioteket jeg bruker. Dette
-er en port av [Adafruit sitt
-originalbibliotek](https://github.com/adafruit/Adafruit-ST7735-Library), til
-Particle. Originalbiblioteket ble senest oppdatert for et par måneder siden, og
-ser ut til å være ganske aktivt vedlikeholdt. Porten som jeg bruker har
-dessverre ikke samme aktivitetsnivå. Det har allikevel fungert fint for meg, og
-siden det er en port, kan dokumenatsjonen til originalbiblioteket gjenbrukes. 
-
-Dessuten ligger biblioteket på Particle sin egen
-["awesome"-liste](https://github.com/particle-iot/awesome-particle). Det har jeg
-tatt som et tegn på at de anbefaler- og bruker det selv. 
+Jeg har også lagt API-nøklene rett inn i webhook-definisjonene. Ideelt sett
+burde de ikke legges inn i koden. Dette er API-nøkler for Opn Weather Map og
+Mailgun. Jeg har antatt at dette er OK fordi dette er en privat
+eksamensbesvarelse hvor ingen av kontoene er knyttet til noen form for
+betalingsinformasjon. Dersom dette var et kommersielt produkt som skulle ut til mange mennesker, ville
+jeg ikke gjort det samme.
 
 ## Mulige utvidelser
+Dingens fungerer fint for mitt bruk, og gjør det den skal. Allikevel er det
+alltid rom for utvidelser. Det mest nærliggende ville være å lagre innstillinger
+permanenet, i en skyløsning eller på et minnekort. Dette er ikke kritisk fordi
+dingsen ikke skal skrus av ved normal bruk. Allikevel er det definitivt noe som
+kunne vært kjekt, f.eks. ved strømbrudd. 
 
-TODO: skriv om mulige utvidelser/forbedringer (men bruk ordet utvidelser)
+På sikt hadde det vært fint å utvide med flere innstillinger for
+kollektivtransporten. I dag må man selv beregne hvor mye tid man trenger på å gå
+til avreisestasjonen. Hvis dingsen hadde hatt tilgang på GPS-lokasjon, kunne den
+ha funnet ut dette automatisk. 
 
 ## Komponenter fra settet 
 * Particle Photon
@@ -374,7 +391,6 @@ Jeg har lagt ved skjemaet som `.fzz` og `.png`.
 
 ## Kilder 
 
-* JEg har tenkta tdette er iot, og at mye derfor bør skje over nett. 
 
 
 
