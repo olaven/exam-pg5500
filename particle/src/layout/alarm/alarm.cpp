@@ -90,7 +90,7 @@ void alarm_listener()
 }
 
 
-void updated_alarm_elements(Element elements[MAX_ELEMENT_COUNT])
+void update_alarm_elements(Element elements[MAX_ELEMENT_COUNT])
 {
     String next_alarm = String(alarm_hour) + ":" + String(alarm_minute); 
 
@@ -103,7 +103,7 @@ Layout get_alarm_layout(Screen *screen)
     return {
         .screen = screen,
         .element_count = 2,
-        .updated_elements = updated_alarm_elements,
+        .update_elements = update_alarm_elements,
         .update_frequency = 60000, //i.e. every minute
     };
 }

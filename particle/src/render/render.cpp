@@ -29,7 +29,7 @@ void render_current_layout(LayoutState * layout_state_pointer)
     Screen * screen_pointer = layout.screen;
 
     Element elements[layout.element_count]; 
-    layout.updated_elements(elements);
+    layout.update_elements(elements);
 
     clear_screen(screen_pointer); 
 

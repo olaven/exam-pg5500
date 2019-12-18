@@ -21,7 +21,7 @@ void setup_message_updater()
     Particle.variable("message", message);
 }
 
-void updated_message_elements(Element elements[MAX_ELEMENT_COUNT])
+void update_message_elements(Element elements[MAX_ELEMENT_COUNT])
 {
     elements[0] = {message, CENTER};
 }
@@ -31,7 +31,7 @@ Layout get_message_layout(Screen *screen)
     return {
         .screen = screen,
         .element_count = element_count,
-        .updated_elements = updated_message_elements,
+        .update_elements = update_message_elements,
         .update_frequency = 18000, //i.e. every 5 minutes
     };
 }

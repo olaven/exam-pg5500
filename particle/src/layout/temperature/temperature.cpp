@@ -38,7 +38,7 @@ void update_inside_temperature()
     inside_temperature = celcius;
 }
 
-void updated_temperature_elements(Element elements[MAX_ELEMENT_COUNT]) 
+void update_temperature_elements(Element elements[MAX_ELEMENT_COUNT]) 
 {
     update_inside_temperature(); 
     Particle.publish("temperature", String::format("{ \"city\": \"%s\" }", temperature_city.c_str()), PRIVATE);
@@ -56,7 +56,7 @@ Layout get_temperature_layout(Screen * screen, int _inside_temperature_pin)
     return {
         .screen = screen,    
         .element_count = 4, 
-        .updated_elements = updated_temperature_elements,
+        .update_elements = update_temperature_elements,
         .update_frequency = 10000, //i.e. every 10 seconds
     };
 }
