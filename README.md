@@ -32,7 +32,6 @@ stor bonus.
 
 Nytteverdien i denne løsningen er derfor høyst reell for meg. 
 
-
 Alarmen kan konfigureres gjennom et webgrensesnitt (i [./web](./web)), blant
 annet. Webgrensesnittet blir beskrevet nærmere [senere](#webgrensesnitt). 
 Man kan også konfigurere alarmen gjennom funksjoner som er tilgjengelige
@@ -370,7 +369,7 @@ gjennom webgrensesnittet. Den kommuniserer automatisk med Entur og finner neste
 alarmtidspunkt basert på dataen den blir konfigurert med. Alarmen ringer også i
 videoen. Ringelyden (til slutt) er ikke pen for ørene - man skal jo
 tross alt våkne skikkelig av den. 
-MERK: det er en liten unøyaktighet i videoen: GUI-et viser alarmtidspunktet som
+MERK: det er en liten unøyaktighet i videoen: GUI-et viser alarmtidspunktet som ferdig
 konfigurert fra start av, til høyre. Denne verdien henger igjen fra tidligere
 testing.
 * [Julemodus](./media/christmas.MOV)
@@ -400,43 +399,6 @@ Jeg har lagt ved skjemaet som `.fzz` og `.png`.
 
 
 
-TODO: fjern under
-# Dokumentasjon 
-
-* Nasjonalt stoppestedsregister (NSR) -> https://stoppested.entur.org/?stopPlaceId=NSR:StopPlace:13825, logg inn med guest/guest
-
-* Hvordan oppgaven ble angrepet 
-* Beskriv hva du har tenkt med koden (ikke hvordan den fungerer) 
-* Sannsynliggjøre at du har forstått oppgaven 
-* Sjekk en v første slides fra iot-forelesning
-
-* koplingsskjema - Fritzing 
-* bruke LED-driver 
-* film av prosjekt 
-* Forklaring i dokumentasjon
-* __veldig viktig med ekstra features__ 
-* ryddig kode 
 
 
-- God dokumentasjon 
-- Unoedvendige ting som er morsomme 
-- leking 
-- god kode
-- ikke hardkod verdier 
-- gjør noe ekstra -> lite til for at det er bedre 
-- Bygg inn noe analogt 
 
-
-Krav: 
-* Løser oppgaven: C 
-* Mer enn nødvendig, ekstra funksjoner: B
-* Mange forskjellige, morsomme ting som passer produktet: A  
-
-Et mål å vise det man har lært 
-
-Dokumentasjon: 
-Hvis man ikke kan forklare noe, betyr det at man ikke kan det. 
-Det er et utgangspunkt at den som leser er en ekstern sensor som kan _litt_ Arduino. Vedkomne skal forstå hvordan ting fungerer. Prinsipper. 
-* Forklar spesielle ting man må gjøre 
-* Begrunn valg man tar 
-* Kode bør i utgangspunktet forklare seg selv 

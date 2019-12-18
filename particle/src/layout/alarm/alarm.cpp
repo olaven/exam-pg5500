@@ -10,6 +10,7 @@
  *  
  * A stop is identified with an ID. 
  * To find an ID manually, one may go to https://stoppested.entur.org and use their interative map. 
+ * Log in with "guest"/"guest"
  */
 
 int alarm_pin = -1;
