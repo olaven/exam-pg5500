@@ -26,7 +26,7 @@ men det betyr at jeg er sårbar for forsinkelser og endringer i rutetabeller.
 Dette har jeg brent meg på flere ganger, og det hender at jeg er litt for sent
 ute til forelesning, som jeg aller helst vil unngå. 
 Det betyr også at vekkealarmene mine knyttes tett opp til rutetider - det er
-nyttig for meg å få kombinert rutetider og vekking i samme "dings". At den i 
+dermed nyttig for meg å få kombinert rutetider og vekking i samme "dings". At den i 
 tillegg kan justere seg etter forsinkelser mer eller mindre i sanntid, er en 
 stor bonus.
 
@@ -41,7 +41,7 @@ app([iOS](https://apps.apple.com/us/app/particle-iot/id991459054) og [Android](h
 
 ### Øvrig funksjonalitet
 I tillegg til denne kjernefunksjonaliteten, har jeg laget annen
-ekstra-funksjonalitet i tillegg, som jeg skal beskrive i kommende avsnitt. 
+ekstra-funksjonalitet, som jeg skal beskrive i kommende avsnitt. 
 
 * Alarmen har en skjerm som til en hver tid viser et alarmens status til brukeren. 
 Brukergrensesnittet består av forskjellige "skjermer" (moduser, vinduer e.l.)
@@ -50,9 +50,9 @@ frem- og tilbake-knapper. Når man bytter, spilles det en liten tone for å gi
 tilbakemelding til brukeren. 
 
 * Følgende skjermer er tilgjengelig: 
- 1. Temperatur
+  1. Temperatur
     * Viser temperaturen inne, som leses med en sensor
-    * Viser temperaturen i egenkonfigurert by (via. [webhooks](#integraser))
+    * Viser temperaturen i egenkonfigurert by (via. [webhooks](#integrasjoner))
  2. Alarm 
     * Viser tidspunktet for neste alarm 
  3. Melding
@@ -64,8 +64,8 @@ tilbakemelding til brukeren.
 * Det er mulig å endre bakgrunns- og tekstfarge via "Particle Cloud Functions",
   for eksempel via webgrensesnittet. 
 
-* I et forsøk på å varsle om skader, vil alarmen dessuten sende mail (TODO:
-  valgfri epost.) dersom alarmen blir utsatt for flamme eller vann. Dette gjøres 
+* I et forsøk på å varsle om skader, vil alarmen dessuten sende mail til en
+  brukerdefinert epost dersom alarmen blir utsatt for flamme eller vann. Dette gjøres 
   med tilkoblet vann- og flammesensor, og integrasjon med
   [Mailgun](https://www.mailgun.com/).
   Det vil være katastrofalt for alarmen dersom den blir utsatt for noen av disse 
@@ -94,9 +94,10 @@ det som skjer på Photon-devicen. Webgrensesnittet jeg har laget er et eksempel
 på dette. 
 
 Dersom man eier de rette nøklene og eier dingsen, gis det tilgang på publiserte
-variable, funksjoner og events. Jeg har valgt å gjøre events private, som vil si
+variable, funksjoner og events. Jeg har valgt å gjøre events `PRIVATE`, som vil si
 at andre ikke får tilgang på dem. I mitt tilfelle er eventene som sendes i
-utgangspuktet bare av interesser for meg, og ikke for andre. 
+utgangspuktet bare av interesser for meg, og ikke for andre. Det er også det
+Particle anbefaler i sin dokumentasjon. 
 
 Jeg eksponerer data om følgende: 
 * Nåværende tidspunkt for alarm 
@@ -113,10 +114,9 @@ Det eksponeres også relevant funksjonalitet for å endre på denne dataen, som 
 masse muligheter for å bygge videre i fremtiden. Har man flere dingser, kan 
 man kombinere flere ting, og få desto flere muligheter. 
 
-Tilkoblingen til nett gjør dessuten at man kan koble andre løsninger på sin
-egen. Dette er svært viktig for min løsning, i og med at kjernefunksjonaliteten 
+Tilkoblingen til nett gjør dessuten at man kan benytte seg av eksterne API-er. Dette er svært viktig for min løsning, i og med at kjernefunksjonaliteten 
 bygger på Entur sitt [API for reiseplanlegging](https://developer.entur.org/pages-journeyplanner-journeyplanner).
-Jeg benytter meg også av [Mailgun sitt API]. Disse tjenestene skriver jeg mer om 
+Jeg benytter meg også av [Mailgun sitt API](https://documentation.mailgun.com/en/latest/api-intro.html#introduction) og [Open Weather Map](https://openweathermap.org/current). Disse tjenestene skriver jeg mer om 
 under [integrasjoner](#integrasjoner). 
 
 ## Oppsett 
@@ -125,7 +125,7 @@ under [integrasjoner](#integrasjoner).
 
 ### Webgrensesnitt
 For å gjøre løsningen mer tilgjengelig for brukeren, har jeg laget et lite
-segrensesnitt som gjør et enklere å konfigurere alarmen. Her kan man endre
+webgrensesnitt som gjør et enklere å konfigurere alarmen. Her kan man endre
 innstillinger, og se status på alarmen. Grensesnittet kjører HTTP-kall mot 
 [Particle Device Cloud
 API](https://docs.particle.io/reference/device-cloud/api/), og står helt fritt 
@@ -148,17 +148,17 @@ hvert som programmet vokste. Av den grunn gikk jeg over til `cpp`-filer.
 Jeg hadde ikke skrevet `C++` før jeg startet på dette prosjektet. Derimot har
 jeg hatt undervisning i `C` dette semesteret. Jeg bestemte meg derfor for å
 holde meg ganske nærme `C`, og holde meg unna klasser og andre `C++`-spesifikke
-ting. Håpet var å unngå for mange nybeginnerfeil.
+ting. Håpet var å unngå for mange nybegynnerfeil.
 
 ### Hovedfil
 Jeg har forsøkt å holde [hovedfilen](particle/src/main.cpp) så oversiktlig som
-mulig. Jeg har ønsket at logikk og "det som faktis skjer" skal ligge et annet
+mulig. Jeg har ønsket at logikk og "det som faktisk skjer" skal ligge et annet
 sted, men at man allikevel skal kunne få en grei forventning av hva programmet
 gjør kun ved å se på `setup` og `loop`-funksjonene.
 
 Funksjoner som klargjør noe (og typisk kjører i `setup`) har "setup" som prefiks
 i navnet sitt. De tingene som sjekkes hver loop (sensorer o.l) gjøres i
-funksjoner som er ment å beskrive handlingen så godt som mulig. Oppdatering av
+funksjoner med navn som er ment å beskrive handlingen så godt som mulig. Oppdatering av
 skjerm diskuteres under [rendring](#rendring). 
 
 ### Rendring
@@ -169,7 +169,7 @@ støtter rendring av "Layouts"(`Layout[]`). Et Layout inneholder "Elements"
 kan vises på. 
 
 ```c
-void updated_clock_elements(Element elements[MAX_ELEMENT_COUNT])
+void update_clock_elements(Element elements[MAX_ELEMENT_COUNT])
 {
     String time = Time.format("%H:%M");
     String date = Time.format("%a:%b");
@@ -183,7 +183,7 @@ Layout get_clock_layout(Screen * screen)
     return {
         .screen = screen,
         .element_count = element_count,
-        .updated_elements = updated_clock_elements,
+        .update_elements = updated_clock_elements,
         .update_frequency = 60000, //i.e. every minute
     };
 }
@@ -207,7 +207,7 @@ void render_current_layout(LayoutState * layout_state_pointer)
     Screen * screen_pointer = layout.screen;
 
     Element elements[layout.element_count]; 
-    layout.updated_elements(elements);
+    layout.update_elements(elements);
 
     clear_screen(screen_pointer); 
 
@@ -219,6 +219,9 @@ void render_current_layout(LayoutState * layout_state_pointer)
 }
 ```
 
+
+Dette synes jeg var en stor fordel, fordi jeg kunne gjenbruke dette systemet
+gjennom hele oppgaven. 
 
 ### Bibliotek
 Jeg har brukt [Adafruit_ST7735](https://github.com/menan/adafruit_st7735) for å
@@ -235,7 +238,7 @@ Dessuten ligger biblioteket på Particle sin egen
 tatt som et tegn på at de anbefaler- og bruker det selv. 
 
 ## Integrasjoner
-Jeg har benyttet av Particle sin integrasjonsløsning for å hente data fra andre
+Jeg har benyttet Particle sin integrasjonsløsning for å hente data fra andre
 tjenester over nettet. Rent konkret har jeg brukt tjenestene:
 * [Entur sin
 reiseplanlegger](https://developer.entur.org/pages-journeyplanner-journeyplanner) 
@@ -248,15 +251,10 @@ akkurat hva som skal skje ("hva slags callback det skal være"), utgjør
 definisjonen på hver enkelt webhook. Triggingen av et callback gjør Particle
 gjennom et "event-system". 
 
-En webhook er litt som å trigge et "callback" med å kalle en URL. Hvilken URL
-som skal kalles og akkurat hva som skal skje ("hva slags callback det skal
-være"), utgjør definisjonen på hver enkelt webhook. Triggingen av et callback
-gjør Particle gjennom et "event-system". 
-
-Events kan publiseres fra particle med `Particle.publish`-metoden. Webhooks kan
+Events kan publiseres fra particle med `Particle.publish`-funksjonen. Webhooks kan
 tolke data sendt i `publish` med å bruke [variable
 substitution](https://docs.particle.io/reference/device-cloud/webhooks/#variable-substitution)
-og [Moustache Templates](mustache.github.io/mustache.5.html). 
+og [Moustache Templates](https://mustache.github.io/mustache.5.html). 
 
 På tilsvarende måte kan man abbonnere (`subscribe`) på svar fra webhook-kallet
 ("callback-et"). Da bruker man [Response
@@ -266,13 +264,13 @@ particle-koden.
 
 
 Events kan publiseres fra particle med `Particle.publish("my_event", data,
-PRIVATE)`nt-system". . Webhooks kan tolke data me kan tolke data sendt i
+PRIVATE)`nt-system". . I Particle kan kan tolke data sendt i
 `publish` med å bruke [Variable
 Substitution](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data)
 og [Moustache
 Templates](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data).
 
-På tilsvarende måte kan man abbonnere (`subscribe`På samme måte  på svar fra
+På tilsvarende måte kan man abbonnere (`subscribe`) på svar fra
 webhook-kallet ("callback-et"). Da bruker man [Response
 Templates](https://docs.particle.io/reference/device-cloud/webhooks/#receiving-complex-data)
 for å tolke dataen. Den ferdigtolkede dataen kommer så inn i en handler i
@@ -301,7 +299,7 @@ String data = String::format("{ \"arrive_by\": \"%s\" }", arrive_by_iso.c_str())
 Particle.publish("transport_event", data, PRIVATE);
 ```
 
-Webhooken har også definert en `resposneTopic`, som gjør at vi kan få tak i
+Webhooken har også definert en `responseTopic`, som gjør at vi kan få tak i
 responsdata med kode omtrent som denne: 
 
 ```c
@@ -315,18 +313,18 @@ void entur_api_handler(const char *event, const char *data)
 Particle.subscribe("transport_response", entur_api_handler, MY_DEVICES);
 ```
 
-Fordi `respnseTemplate` også er definert, vil dataen som `entur_api_handler` får
-inn være hentet ut fra responsobjektet som Entur returnerer. 
+Fordi `respnseTemplate` også er definert, vil dataen tolkes av den (altså kun gi
+den dataen jeg trenger) før den blir sendt til `data` i `entur_api_handler`.
 
 ### Begrensninger 
 
-Fordi jeg bruker en gratiskonto hos Mailgun kan jeg kun sende epost til
-addresser som var godkjent på forhånd. Jeg bruker også et av deres "sandbox
+Fordi jeg bruker en gratiskonto hos Mailgun er det kun mulig å sende til
+addresser som er godkjent på forhånd. Jeg bruker også et av deres "sandbox
 domains" i stedet for å legge til mitt eget. Dette er først og fremst fordi jeg
 ville identifisert meg selv dersom jeg la til et domene jeg eier.
 
 Jeg har også lagt API-nøklene rett inn i webhook-definisjonene. Ideelt sett
-burde de ikke legges inn i koden. Dette er API-nøkler for Opn Weather Map og
+burde de ikke legges inn i koden. Dette gjelder API-nøkler for Open Weather Map og
 Mailgun. Jeg har antatt at dette er OK fordi dette er en privat
 eksamensbesvarelse hvor ingen av kontoene er knyttet til noen form for
 betalingsinformasjon. Dersom dette var et kommersielt produkt som skulle ut til mange mennesker, ville
@@ -342,7 +340,7 @@ kunne vært kjekt, f.eks. ved strømbrudd.
 På sikt hadde det vært fint å utvide med flere innstillinger for
 kollektivtransporten. I dag må man selv beregne hvor mye tid man trenger på å gå
 til avreisestasjonen. Hvis dingsen hadde hatt tilgang på GPS-lokasjon, kunne den
-ha funnet ut dette automatisk. 
+ha funnet ut dette automatisk, for eksempel. 
 
 ## Komponenter fra settet 
 * Particle Photon
@@ -378,7 +376,7 @@ testing.
 * [Video om valgfri melding](./media/message.MOV)
 * Demo av [temperatur](./media/temperature.MOV) viser lokalt målt temperatur og
 den fra egenvalgt by, samt endring av valgt by gjennom GUI
-* En kort [video](./media/navigation.MOV) som viser navigering.
+* En kort [video](./media/navigation.MOV) som viser navingering mellom skjermer.
 
 ## Koblingsskjema
 Det er noen avvik i koblingsskjemaet: 
@@ -389,7 +387,6 @@ Jeg har lagt ved skjemaet som `.fzz` og `.png`.
 
 ![Bilde av skjemaet](./media/sketch.png)
 
-## Kilder 
 
 
 
