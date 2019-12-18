@@ -321,7 +321,9 @@ den dataen jeg trenger) før den blir sendt til `data` i `entur_api_handler`.
 Fordi jeg bruker en gratiskonto hos Mailgun er det kun mulig å sende til
 addresser som er godkjent på forhånd. Jeg bruker også et av deres "sandbox
 domains" i stedet for å legge til mitt eget. Dette er først og fremst fordi jeg
-ville identifisert meg selv dersom jeg la til et domene jeg eier.
+ville identifisert meg selv dersom jeg la til et domene jeg eier. Domenet jeg
+bruker er også knyttet til min mailgun-konto, som vil si at den må byttes dersom
+epost-webhooken skal fungere for andre.  
 
 Jeg har også lagt API-nøklene rett inn i webhook-definisjonene. Ideelt sett
 burde de ikke legges inn i koden. Dette gjelder API-nøkler for Open Weather Map og
@@ -387,25 +389,22 @@ Jeg har lagt ved skjemaet som `.fzz` og `.png`.
 
 ![Bilde av skjemaet](./media/sketch.png)
 
-
+## Kilder 
+* [Particle sin
+  dokumentasjon](https://docs.particle.io/reference/device-os/firmware/photon/)
+* [Entur sin dokumentasjon](https://www.entur.org/for-developers/)
+* "Prosjektslide" fra undervisningen 
+* [Eksempel på
+  musikk](https://github.com/AbhishekGhosh/Arduino-Buzzer-Tone-Codes/blob/master/Jingle-bells.ino)
+* [Entur/GraphQL-eksempel i python](https://github.com/entur/api-examples/blob/master/journeyplanner/python/journeyplanner-response-to-json.py)
 
 
 
 TODO: fjern under
 # Dokumentasjon 
 
-* skriv om fronted -> setup med .env
-* forskjellige maater aa endre tidspunkt paa (iso/individuel)
-* Koblet opp mye mot cloud (eksponert vars osv.) for aa kunne utvide mer senere 
-* flammemail referanse til IT project  
-* legg til screenshot av webhook-config (sladd nøkler)
 * Nasjonalt stoppestedsregister (NSR) -> https://stoppested.entur.org/?stopPlaceId=NSR:StopPlace:13825, logg inn med guest/guest
-* om nøkler
-* om regelmessig oppdatering av alarm
 
-* Oversikt over komponenter 
-* Skrive hvilke komponenter 
-* Reflekter rundt valg av bibliotek 
 * Hvordan oppgaven ble angrepet 
 * Beskriv hva du har tenkt med koden (ikke hvordan den fungerer) 
 * Sannsynliggjøre at du har forstått oppgaven 
