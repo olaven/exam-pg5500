@@ -3,6 +3,15 @@
 #include "state.h"
 #include "alarm.h"
 
+/**
+ * General note: 
+ * The locations are based on Nasjonalt Stoppestedsregister 
+ * (NSR, https://www.entur.org/wp-content/uploads/2018/03/Nasjonalt-stoppestedsregister.pdf)
+ *  
+ * A stop is identified with an ID. 
+ * To find an ID manually, one may go to https://stoppested.entur.org and use their interative map. 
+ */
+
 int alarm_pin = -1;
 
 void setup_alarm(int _alarm_pin)
